@@ -22,7 +22,10 @@ export function fitViewBox(layout) {
 
 // layout: { sections, decorations } as in stores.json.
 export function renderLayoutSvg(layout, { viewBox = fitViewBox(layout) } = {}) {
-  const baseFontSize = Math.max(viewBox.w, viewBox.h) / 40;
+  // Label size is relative to the store, not to the visible area, so labels scale with the
+  // map when zooming instead of staying the same size on screen.
+  const storeSize = fitViewBox(layout);
+  const baseFontSize = Math.max(storeSize.w, storeSize.h) / 40;
   const parts = [];
   for (const decoration of layout.decorations) {
     const classes = decoration.visible === false ? 'decoration invisible' : 'decoration';
@@ -43,10 +46,22 @@ function renderRect(rect) {
   return `<rect x="${formatNumber(rect.x)}" y="${formatNumber(rect.y)}" width="${formatNumber(rect.w)}" height="${formatNumber(rect.h)}"/>`;
 }
 
-// Centred label, rotated for tall narrow rects, and shrunk so it doesn't overflow the short side.
+// Rough width of an average character, in font-size units.
+const CHAR_WIDTH = 0.6;
+
+// Largest font size (up to baseFontSize) at which text fits a box `along` wide and `across` high.
+function fittingFontSize(text, along, across, baseFontSize) {
+  const byLength = (along * 0.9) / (Math.max(text.length, 1) * CHAR_WIDTH);
+  return Math.min(baseFontSize, across * 0.7, byLength);
+}
+
+// Centred label, shrunk to fit inside its rect, and rotated when that lets it be bigger
+// (tall narrow sections).
 function renderLabel(text, rect, baseFontSize) {
-  const vertical = rect.h > rect.w;
-  const fontSize = Math.min(baseFontSize, (vertical ? rect.w : rect.h) * 0.6);
+  const horizontalSize = fittingFontSize(text, rect.w, rect.h, baseFontSize);
+  const verticalSize = fittingFontSize(text, rect.h, rect.w, baseFontSize);
+  const vertical = verticalSize > horizontalSize;
+  const fontSize = vertical ? verticalSize : horizontalSize;
   const cx = formatNumber(rect.x + rect.w / 2);
   const cy = formatNumber(rect.y + rect.h / 2);
   const rotate = vertical ? ` transform="rotate(-90 ${cx} ${cy})"` : '';

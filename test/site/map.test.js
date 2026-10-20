@@ -24,9 +24,32 @@ test('renderLayoutSvg draws every section and decoration with labels', () => {
   assert.match(svg, />Wejście<\/text>/);
 });
 
-test('renderLayoutSvg rotates labels of tall rects', () => {
-  const svg = renderLayoutSvg(store());
-  assert.match(svg, /rotate\(-90 14 4\)">Makarony</);
+const fontSizeOf = (svg, label) => Number(new RegExp(`font-size="([\\d.]+)"[^>]*>${label}<`).exec(svg)[1]);
+
+test('labels rotate only when that lets them be bigger', () => {
+  const layout = {
+    sections: [
+      { name: 'Makarony i kasze', rect: { x: 0, y: 0, w: 2, h: 20 } },
+      { name: 'Ryby', rect: { x: 5, y: 0, w: 10, h: 12 } },
+    ],
+    decorations: [],
+  };
+  const svg = renderLayoutSvg(layout);
+  assert.match(svg, /rotate\(-90 1 10\)">Makarony i kasze</);
+  assert.doesNotMatch(svg, /rotate[^>]*>Ryby</);
+});
+
+test('labels fit inside their rect', () => {
+  const layout = { sections: [{ name: 'Bardzo długa nazwa działu', rect: { x: 0, y: 0, w: 10, h: 10 } }], decorations: [] };
+  const fontSize = fontSizeOf(renderLayoutSvg(layout), 'Bardzo długa nazwa działu');
+  // 25 characters at ~0.6 em each must fit in 90% of the 10-unit width.
+  assert.ok(25 * 0.6 * fontSize <= 9 + 1e-9);
+});
+
+test('label size depends on the store, not on the zoom', () => {
+  const zoomedIn = renderLayoutSvg(store(), { viewBox: { x: 0, y: 0, w: 10, h: 6 } });
+  const zoomedOut = renderLayoutSvg(store(), { viewBox: { x: -100, y: -100, w: 300, h: 200 } });
+  assert.equal(fontSizeOf(zoomedIn, 'Nabiał'), fontSizeOf(zoomedOut, 'Nabiał'));
 });
 
 test('renderLayoutSvg escapes names and accepts a custom view box', () => {
