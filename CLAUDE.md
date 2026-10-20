@@ -27,15 +27,15 @@ editor (`scripts/`) edits that data.
 
 ## Commands
 
-*(Planned, not implemented yet; see docs/plan.md.)*
-
 | Command | What it does |
 |---------|--------------|
-| `npm test` | Run all tests (`node --test`), including validation of the real data |
-| `node scripts/edit.js` | Interactive data editor |
-| `node scripts/serve.js` | Serve the site locally (mirrors the deployed layout) |
+| `npm test` | Run all tests: `node --test` on `test/**/*.test.js` |
+| `node scripts/edit.js` | Interactive data editor *(not implemented yet)* |
+| `node scripts/serve.js` | Serve the site locally, mirroring the deployed layout *(not implemented yet)* |
 
-No git hooks. The user runs tests by hand. CI runs them and only deploys if they pass.
+Run `npm test` after every change. Only files named `*.test.js` under `test/` are run as tests;
+helpers and fixtures in `test/` use other names. No git hooks: the user runs tests by hand, and
+CI runs them and only deploys if they pass.
 
 ## Layout
 

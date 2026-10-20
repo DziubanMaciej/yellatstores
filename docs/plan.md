@@ -61,9 +61,9 @@ Then the test saves to a temp dir and runs **the same `validate()`** on the resu
 or terminal is needed in tests. The drawing page itself (mouse handling) isn't unit-tested;
 its pure geometry helpers (normalise a dragged rect, overlap check) are.
 
-## Phase 0: Scaffolding
-1. `.gitignore`, `package.json` (no dependencies), folder skeleton, `test/` with one trivial
-   test. You create the git repo yourself.
+## Phase 0: Scaffolding ✅
+1. `.gitignore`, `package.json` (no dependencies), and `test/setup.test.js`, which checks the ES module
+   setup and that there are no dependencies. Folders are created when their first files arrive.
 2. Update CLAUDE.md with the commands (`npm test`, `node scripts/edit.js`, `node scripts/serve.js`).
 
 *Done when:* the single test command runs and passes.
