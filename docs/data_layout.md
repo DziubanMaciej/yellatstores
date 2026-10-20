@@ -113,6 +113,15 @@ editor, and on the output of the editor tests.
 7. Every rect has `w > 0` and `h > 0`. **No two rects in a store overlap or touch**, whether sections,
    decorations, or invisible decorations. Any two rects must be at least **1 unit** apart,
    horizontally or vertically.
-8. Files are formatted as the editor writes them: 2-space indent, trailing newline,
-   object keys sorted alphabetically, arrays (sections, decorations, aliases, ingredients)
-   in their stored order.
+8. Files are formatted as the editor writes them:
+   - 2-space indent and a trailing newline.
+   - Name-keyed objects (products, recipes, stores, a store's products) are sorted in Polish
+     alphabetical order.
+   - Record fields are in fixed order (`x, y, w, h`; `name, rect`; `rect, label, visible`).
+   - Arrays (sections, decorations, aliases, ingredients) keep their stored order.
+   - Short objects/arrays of plain values stay on one line (≤ 60 characters), e.g.
+     `{ "x": 0, "y": 0, "w": 10, "h": 8 }`.
+
+   A hand-edited file that breaks only this rule can be fixed with the editor's "Validate data".
+9. Product names, recipe names and their aliases can't contain `,` `;` `(` `)`. The site's
+   list parser treats those as separators or notes, so such a name could never be matched.

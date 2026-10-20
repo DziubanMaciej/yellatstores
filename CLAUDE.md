@@ -16,8 +16,10 @@ editor (`scripts/`) edits that data.
   the site UI and the data content.
 - The site is plain HTML + vanilla JS ES modules + CSS. Logic lives in pure modules in
   `site/lib/` (no DOM), which are shared with the editor and tested in Node.
-- The editor must be testable: commands talk to the user only through an injected `io` object,
-  and tests drive them with scripted answers.
+- The editor must be testable: commands talk to the user only through `ctx.io` / `ctx.browser`,
+  and change data only through `ctx.change()` (apply to a copy → validate → save). Tests drive
+  commands with `test/helpers/editor.js`. New data rules belong in `scripts/lib/validate.js`,
+  not in individual commands.
 - `data/` is the single source of truth. Always write it through the editor's save (validate
   first, canonical formatting) so git diffs stay clean.
 - Don't add features, options or abstractions that weren't asked for. See the non-goals in
@@ -30,7 +32,7 @@ editor (`scripts/`) edits that data.
 | Command | What it does |
 |---------|--------------|
 | `npm test` | Run all tests: `node --test` on `test/**/*.test.js` |
-| `node scripts/edit.js` | Interactive data editor *(not implemented yet)* |
+| `node scripts/edit.js` | Interactive data editor (terminal menu; drawing/viewing opens the browser) |
 | `node scripts/serve.js` | Serve the site locally, mirroring the deployed layout *(not implemented yet)* |
 
 Run `npm test` after every change. Only files named `*.test.js` under `test/` are run as tests;
@@ -43,7 +45,7 @@ CI runs them and only deploys if they pass.
 |------|----------|
 | `data/` | `products.json`, `recipes.json`, `stores.json` |
 | `site/` | Deployed site. `site/lib/` holds pure shared logic |
-| `scripts/` | Local editor + dev server, never deployed |
+| `scripts/` | Local editor (`edit.js`, `lib/`, browser pages in `web/`), never deployed |
 | `test/` | All tests |
 | `docs/` | Documentation |
 | `.claude/skills/` | Project Claude skills (`fill-aliases`) |

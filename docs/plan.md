@@ -4,116 +4,109 @@ The order follows your answer: **editor scripts + tests first, then the site.** 
 ends in a working, tested state. All design questions are answered (see [decisions.md](decisions.md)).
 New questions that come up go to the user, and the answers are logged in decisions.md.
 
-Editor UI: a terminal menu, plus a local browser page for drawing and viewing (decided).
+Editor UI: a terminal menu, plus a local browser page for drawing and viewing.
 
 ## File layout
 
+✅ = exists. The rest is planned.
+
 ```
 yellatstores/
-├── CLAUDE.md
-├── package.json              {"type":"module", "scripts":{"test":"node --test"}}, no dependencies
+├── CLAUDE.md ✅
+├── package.json ✅           {"type":"module", "scripts":{"test":…}}, no dependencies
 ├── .github/workflows/pages.yml   test job → deploy job (site/ + data/)
-├── .claude/skills/fill-aliases/SKILL.md
-├── data/                     products.json, recipes.json, stores.json
-├── docs/
+├── .claude/skills/fill-aliases/SKILL.md ✅
+├── data/ ✅                  products.json, recipes.json, stores.json
+├── docs/ ✅
 ├── site/                     deployed as the site root
 │   ├── index.html, style.css
 │   ├── app.js                DOM wiring only, no logic
 │   └── lib/                  pure ES modules, no DOM; shared with the editor
-│       ├── normalize.js      normalize(), used everywhere names are compared
+│       ├── normalize.js ✅   normalize(), compareNames() (Polish alphabetical order)
+│       ├── geometry.js ✅    rect gap/overlap, drag → rect, bounding boxes
+│       ├── map.js ✅         store layout → SVG markup string
 │       ├── parse.js          split input, extract quantity + notes
 │       ├── expand.js         recipe expansion
 │       ├── resolve.js        name → product, product → section / unknown reason
 │       ├── group.js          group + order sections, Unknown last
-│       ├── map.js            store → SVG markup string (sections + decorations)
 │       └── share.js          list/store ⇄ URL fragment
 ├── scripts/                  local only, never deployed
-│   ├── edit.js               editor entry point: `node scripts/edit.js`
+│   ├── edit.js ✅            editor entry point: `node scripts/edit.js`
 │   ├── serve.js              local static server mirroring the deployed layout (site/ at /, data/ at /data)
-│   ├── lib/
+│   ├── lib/ ✅
 │   │   ├── data.js           load / save (validate → canonical formatting → write)
-│   │   ├── validate.js       validate(dir) → list of errors
-│   │   ├── io.js             terminal I/O (readline) behind a small interface
-│   │   ├── browser.js        starts a local page for drawing/viewing, waits for the result
-│   │   └── commands/         one file per menu command, logic only
-│   └── draw/                 browser page for drawing rects (uses site/lib/map.js)
-└── test/
-    ├── fixtures/             small valid + deliberately broken data sets
+│   │   ├── format.js         canonical JSON formatting
+│   │   ├── validate.js       validateData(data), validateDir(dir) → list of errors
+│   │   ├── io.js             ask / choose / confirm / print; terminal and scripted versions
+│   │   ├── context.js        loaded data + ctx.change(): apply → validate → save
+│   │   ├── input.js          name cleanup, lookup by name/alias, store picker
+│   │   ├── browser.js        short-lived local server for the browser pages
+│   │   ├── store-view.js     data for the "View store" page
+│   │   ├── menu.js           main menu loop
+│   │   └── commands/         one file per menu command
+│   └── web/ ✅               browser pages: draw.html/js, view.html/js, api.js, style.css,
+│                             draw-model.js (pure drawing rules, tested in Node)
+└── test/ ✅
+    ├── helpers/              sample data, scripted editor session (fake io + fake browser)
     ├── site/*.test.js
-    ├── scripts/*.test.js
-    └── data.test.js          validate('data/') on the real data
+    ├── scripts/**/*.test.js
+    └── data.test.js          validateDir('data/') on the real data
 ```
 
-Why `site/lib` is shared: the editor imports `normalize.js` and `map.js` from there. Matching
-and map drawing then exist only once, so the editor and the site can't drift apart.
+Why `site/lib` is shared: the editor imports `normalize.js`, `geometry.js` and `map.js` from
+there, so matching, overlap rules and map drawing exist only once. The editor's local server
+serves `site/lib` at `/site/lib/`, so the same relative imports work in the browser and in Node.
 
 ## Testability design (editor)
 
-Every command is a function `async run(data, io)`:
-- `data` is the loaded in-memory data.
-- `io` is the only way to talk to the user, through `ask(text)`, `choose(text, options)`,
-  `print(text)`, `drawSections(store)` and `showStore(store)`.
-- The real `io` uses readline and the browser.
-- Tests pass a **fake io** with a scripted list of answers, plus a fake `drawSections` that returns
-  predefined rects.
-
-Then the test saves to a temp dir and runs **the same `validate()`** on the result. No browser
-or terminal is needed in tests. The drawing page itself (mouse handling) isn't unit-tested;
-its pure geometry helpers (normalise a dragged rect, overlap check) are.
+- Every command is `async command(ctx)`. `ctx` holds:
+  - the loaded `data`
+  - `io` with `ask`, `choose`, `confirm` and `print`, the only way to talk to the user
+  - `browser` with `drawLayout(params)` and `showStore(view)`
+  - `change(mutate)`, which applies a change to a copy, runs `validateData()`, then saves and
+    adopts it, or prints the errors and changes nothing
+- All rules therefore live in the validator, not in the commands.
+- Tests (`test/helpers/editor.js`) build `ctx` with a scripted io (a list of typed answers), a
+  fake browser (a list of page results) and a temp data dir. At the end, they run
+  **`validateDir()`** on the written files.
+- The browser pages:
+  - The local server is tested by playing the page's part over HTTP.
+  - The pure drawing rules (`draw-model.js`) are unit-tested.
+  - The DOM/mouse code was checked by hand in headless Firefox. It has no automated test, because
+    that would need a browser-automation dependency.
 
 ## Phase 0: Scaffolding ✅
-1. `.gitignore`, `package.json` (no dependencies), and `test/setup.test.js`, which checks the ES module
-   setup and that there are no dependencies. Folders are created when their first files arrive.
-2. Update CLAUDE.md with the commands (`npm test`, `node scripts/edit.js`, `node scripts/serve.js`).
+`.gitignore`, `package.json` (no dependencies), `test/setup.test.js` (ES modules, no dependencies),
+and the CLAUDE.md commands.
 
-*Done when:* the single test command runs and passes.
+## Phase 1: Data core ✅
+- `normalize.js`
+- `geometry.js`
+- `format.js` (canonical formatting)
+- `data.js` (load/save; saving refuses invalid data)
+- `validate.js` (every rule in [data_layout.md](data_layout.md#integrity-rules), with one or
+  more tests per rule)
+- `data/` starts as empty files (`{}`), and `test/data.test.js` validates it.
 
-## Phase 1: Data core
-1. `site/lib/normalize.js` + tests (case, whitespace, all Polish diacritics including `ł`).
-2. `scripts/lib/validate.js`, implementing every rule in [data_layout.md](data_layout.md#integrity-rules).
-   Tests run it on fixtures: one valid set, plus one broken set per rule, each asserting the
-   expected error message.
-3. `scripts/lib/data.js`: load and save with canonical formatting. Test: load → save
-   leaves the files byte-identical.
-4. Minimal real `data/` (a few products, one recipe, one store with 2–3 sections typed by hand)
-   + `test/data.test.js`.
+## Phase 2: Editor, text commands ✅
+- `io.js` and the menu loop
+- E3 add products, E4 add aliases (products and recipes), E5 add recipes, E6 assign products,
+  E8 validate (offers to reformat when formatting is the only problem)
+- Each has a test file.
 
-## Phase 2: Editor, text commands
-1. `scripts/lib/io.js` + the menu loop in `edit.js` (numbered options, `q` to quit).
-2. Commands, each with tests via the fake io:
-   - E3 add product (rejects collisions)
-   - E4 add aliases
-   - E5 add recipe (ingredients picked from products)
-   - E6 assign products: only unassigned ones; options are the sections, "not in store" and quit; saves after every answer
-   - E8 validate
-3. Each command's test ends with `validate()` on the written output.
+## Phase 3: Map rendering + view store ✅
+- `site/lib/map.js`
+- `browser.js` (local server, opens pages with `xdg-open`)
+- E7 view store: map + alphabetical products per section, not carried, unassigned
 
-*Done when:* you can build up products/recipes and assign them for a hand-made store.
-
-## Phase 3: Map rendering + view store
-1. `site/lib/map.js`: store → SVG string (bounding box → `viewBox`, rects, labels, decorations).
-   Tests check the structure (viewBox and element counts), not the pixels.
-2. `scripts/lib/browser.js` + `serve.js`: a local HTTP server on a free port. It opens Firefox
-   with `xdg-open` and, for drawing, receives the result via `POST`.
-3. E7 view store: a page with the map and an alphabetical product list per section (plus
-   not-in-store / unassigned).
-
-## Phase 4: Drawing
-1. `scripts/draw/`: a page showing the current sections (via `map.js`).
-   - Drag to create a rect, then enter a name.
-   - A toggle switches between drawing a section and drawing a decoration (label + visible checkbox).
-     Decorations are drawn dimmer.
-   - Rects overlapping any other rect are refused.
-   - A **Done** button posts the result back. The editor UI is in English.
-2. E1 create store: name in the terminal, then `io.drawSections()`.
-3. E2 edit store layout: the terminal asks add / redraw / rename and which section or decoration.
-   - Redraw opens the page with that one rect removed from the canvas so you can draw it again.
-     A redrawn section keeps its name and products.
-   - Rename is terminal-only. A section rename updates `store.products`.
-4. Tests: E1/E2 through the fake io, plus pure geometry helpers (normalise a dragged rect,
-   overlap check).
-
-*Done when:* you can create a real store from scratch and view it.
+## Phase 4: Drawing ✅
+- `scripts/web/draw.*` in two modes:
+  - **add**: any number of sections/decorations
+  - **redraw**: one rect, with the old position shown dashed
+- Rects closer than 1 unit to anything are refused.
+- Also: Undo, More space, Cancel, Done.
+- E1 create store, and E2 edit store layout: add, redraw a section or decoration, rename a
+  section (its assignments follow), change a decoration label.
 
 ## Phase 5: Real data + fill-aliases skill
 1. Polish `.claude/skills/fill-aliases/SKILL.md` (draft exists, see [skills.md](skills.md)).
@@ -144,7 +137,7 @@ Polish characters, newlines, `&`/`=`/`#` inside the list, a store missing from t
 
 ## Phase 8: Deploy
 1. `.github/workflows/pages.yml` with two jobs. On push to `main`:
-   - **test**: `node --test`.
+   - **test**: `npm test`.
    - **deploy** (`needs: test`): copy `site/*` and `data/` into `_site/`, run `upload-pages-artifact`, then `deploy-pages`.
    - If the tests fail, deploy never runs and the **previous version stays live**. The site is never taken down.
 2. Follow [hosting.md](hosting.md).

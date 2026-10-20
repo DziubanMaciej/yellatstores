@@ -81,3 +81,18 @@ Short record of what was decided and why. The details live in the other docs.
 | Highlight | One at a time. |
 | Unrecognised duplicates | Not merged, listed twice. |
 | Rect spacing | At least a 1-unit gap between any two rects. Units are abstract and scaled dynamically by every renderer, not tied to pixels. |
+
+## Implementation choices (2026-10-20, Claude, please confirm)
+
+Small choices made while building the editor. Each is easy to change.
+
+| Topic | Choice |
+|-------|--------|
+| Coordinates | Dragging rounds to whole units. An empty store's drawing area is 100×60 units. "More space" grows the area by 25%. |
+| Name characters | Product/recipe names and aliases can't contain `, ; ( )`, because the site parser could never match them (data_layout rule 9). |
+| Assign flow | Besides a section number or `0` (not in store), you can type `s` to skip (stays unassigned, asked again next time), `?` to reprint the sections, or `q` to quit. |
+| Add commands | Add products/aliases/recipes repeat until you enter an empty name, which makes entering many items quick. Ingredients and aliases-to-extend are typed by name or alias, not picked from a long numbered list. |
+| Drawing page | Undo removes rects drawn in the current session only (saved data still can't be deleted). Cancel discards the session. |
+| Validate | When formatting is the only problem (after a hand edit), "Validate data" offers to rewrite the files. |
+| Initial data | `data/` starts as empty `{}` files; no made-up sample store. |
+| End of input | Ctrl+D in the editor exits cleanly (everything is saved after each change anyway). |

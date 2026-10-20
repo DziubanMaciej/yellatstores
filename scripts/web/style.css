@@ -1,0 +1,163 @@
+:root {
+  --ink: #1d232a;
+  --muted: #69727d;
+  --line: #d5d9de;
+  --accent: #2563eb;
+  --section-fill: #dbe7ff;
+  --section-stroke: #3b5fc4;
+  --decoration-fill: #eef0f3;
+  --decoration-stroke: #b3bac3;
+  --error: #b42318;
+  font-family: system-ui, sans-serif;
+  color: var(--ink);
+}
+
+body {
+  margin: 0;
+  padding: 16px;
+  background: #fff;
+}
+
+h1 {
+  font-size: 1.2rem;
+  margin: 0 0 12px;
+}
+
+button {
+  font: inherit;
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #f6f7f9;
+  cursor: pointer;
+}
+
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* Store map, shared markup from site/lib/map.js */
+.store-map {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 80vh;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+}
+
+.store-map rect {
+  vector-effect: non-scaling-stroke;
+  stroke-width: 1.5px;
+}
+
+.store-map .section rect {
+  fill: var(--section-fill);
+  stroke: var(--section-stroke);
+}
+
+.store-map .decoration rect {
+  fill: var(--decoration-fill);
+  stroke: var(--decoration-stroke);
+}
+
+.store-map .decoration.invisible rect {
+  fill: none;
+  stroke: none;
+}
+
+.store-map text {
+  fill: var(--ink);
+  pointer-events: none;
+}
+
+.store-map .decoration text {
+  fill: var(--muted);
+}
+
+.store-map .ghost rect {
+  fill: none;
+  stroke: var(--muted);
+  stroke-dasharray: 4 3;
+}
+
+/* View page */
+.view {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(220px, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+@media (max-width: 700px) {
+  .view {
+    grid-template-columns: 1fr;
+  }
+}
+
+.groups h2 {
+  font-size: 1rem;
+  margin: 12px 0 4px;
+}
+
+.groups ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.groups .empty {
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* Draw page */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.toolbar input[type='text'] {
+  font: inherit;
+  padding: 5px 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+
+.status {
+  min-height: 1.4em;
+  margin: 8px 0;
+  color: var(--muted);
+}
+
+.status.error {
+  color: var(--error);
+}
+
+#canvas {
+  touch-action: none;
+  cursor: crosshair;
+}
+
+/* Draw page: invisible decorations get a dashed outline so they can be seen while editing. */
+#canvas .decoration.invisible rect {
+  stroke: var(--decoration-stroke);
+  stroke-dasharray: 2 2;
+}
+
+#canvas .preview {
+  fill: rgba(37, 99, 235, 0.15);
+  stroke: var(--accent);
+  stroke-dasharray: 4 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.done-message {
+  font-size: 1.1rem;
+  margin-top: 24px;
+}
