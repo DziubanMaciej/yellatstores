@@ -19,6 +19,7 @@ export function buildStoreView(data, storeName) {
   }
 
   const groups = store.sections.map((section) => ({
+    section: section.id,
     title: `${section.id}) ${section.name}`,
     items: sectionGroups.get(section.id),
   }));

@@ -112,6 +112,42 @@ button.primary {
   padding-left: 20px;
 }
 
+.groups {
+  margin-top: 8px;
+}
+
+.groups .group {
+  padding: 2px 8px 6px;
+  border-radius: 6px;
+}
+
+.groups .group[data-section] {
+  cursor: pointer;
+}
+
+.store-map .section {
+  cursor: pointer;
+}
+
+.groups .group.hovered {
+  background: #eef3ff;
+}
+
+.store-map .section.hovered rect {
+  stroke-width: 2.5px;
+}
+
+.groups .group.selected {
+  background: var(--section-fill);
+  outline: 2px solid var(--section-stroke);
+}
+
+.store-map .section.selected rect {
+  fill: var(--accent);
+  fill-opacity: 0.35;
+  stroke-width: 3px;
+}
+
 .groups .empty {
   color: var(--muted);
   font-style: italic;

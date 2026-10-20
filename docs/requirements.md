@@ -132,7 +132,7 @@ tests run them with scripted answers against a temporary data directory.
 | E4 | **Add aliases** | Pick a product **or recipe** and add aliases. |
 | E5 | **Add recipe** | Name, aliases, ingredients picked from products. |
 | E6 | **Assign products to store** | Pick a store; a browser page shows the **unassigned** products one at a time (alphabetically) above the store map with section ids. **Click a section** to assign the product, or use **Not in this store** (`null`), **Skip** (stays unassigned), **Back** (previous product, its answer is cleared) or **Done**. Every click is saved immediately. |
-| E7 | **View store** | Browser page: the map with labels and section ids, and beside it the products sorted alphabetically, grouped by section, plus "not in store" and "unassigned" groups. |
+| E7 | **View store** | Browser page: the map with labels and section ids, and beside it the products sorted alphabetically, grouped by section, plus "not in store" and "unassigned" groups. Linked highlight between a section on the map and its group in the list: slight on hover, strong on click (toggle, one at a time, like the site). |
 | E8 | **Validate** | Run the integrity checks on `data/` and print the errors. |
 
 Every save validates first and refuses to write invalid data. Nothing can be deleted from the

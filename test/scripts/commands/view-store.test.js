@@ -14,9 +14,9 @@ test('store view groups products alphabetically by section, then not carried and
   assert.match(view.svg, /^<svg /);
   assert.match(view.svg, /class="section-id"/);
   assert.deepEqual(view.groups, [
-    { title: '1) Warzywa', items: ['cebula', 'pomidory'] },
-    { title: '2) Makarony', items: ['makaron'] },
-    { title: '3) Nabiał', items: [] },
+    { section: 1, title: '1) Warzywa', items: ['cebula', 'pomidory'] },
+    { section: 2, title: '2) Makarony', items: ['makaron'] },
+    { section: 3, title: '3) Nabiał', items: [] },
     { title: 'Not in this store', items: ['passata'] },
     { title: 'Unassigned', items: ['mleko'] },
   ]);
