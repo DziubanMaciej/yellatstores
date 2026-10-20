@@ -1,1 +1,189 @@
-{}
+{
+  "lidl_hynka": {
+    "sections": [
+      {
+        "id": 1,
+        "name": "Pieczywo",
+        "rect": { "x": -6, "y": 86, "w": 28, "h": 48 }
+      },
+      {
+        "id": 2,
+        "name": "Warzywa, owoce, sosy",
+        "rect": { "x": 23, "y": 86, "w": 50, "h": 48 }
+      },
+      {
+        "id": 3,
+        "name": "Wędliny, wege, słodycze",
+        "rect": { "x": -6, "y": 53, "w": 28, "h": 32 }
+      },
+      {
+        "id": 4,
+        "name": "Kawa, herbata",
+        "rect": { "x": 23, "y": 53, "w": 18, "h": 32 }
+      },
+      {
+        "id": 5,
+        "name": "Sery, mięso",
+        "rect": { "x": -6, "y": 18, "w": 47, "h": 34 }
+      },
+      {
+        "id": 6,
+        "name": "Jogurty, śmietana",
+        "rect": { "x": -6, "y": 4, "w": 190, "h": 13 }
+      },
+      {
+        "id": 7,
+        "name": "Mąka, mleko, jajka, mrożonki",
+        "rect": { "x": 148, "y": 18, "w": 36, "h": 67 }
+      },
+      {
+        "id": 8,
+        "name": "Makaron, ryż",
+        "rect": { "x": 111, "y": 53, "w": 36, "h": 32 }
+      },
+      {
+        "id": 9,
+        "name": "Alkohol, czipsy, orzechy",
+        "rect": { "x": 148, "y": 86, "w": 36, "h": 48 }
+      },
+      {
+        "id": 10,
+        "name": "Woda, soki",
+        "rect": { "x": 111, "y": 86, "w": 36, "h": 48 }
+      },
+      {
+        "id": 11,
+        "name": "Rossman",
+        "rect": { "x": 74, "y": 86, "w": 36, "h": 48 }
+      },
+      {
+        "id": 12,
+        "name": "Kasy",
+        "rect": { "x": 23, "y": 135, "w": 161, "h": 13 }
+      }
+    ],
+    "decorations": [
+      {
+        "rect": { "x": -6, "y": 135, "w": 28, "h": 13 },
+        "label": "Korytarz"
+      },
+      {
+        "rect": { "x": 11, "y": 149, "w": 173, "h": 8 },
+        "label": "Korytarz"
+      },
+      {
+        "rect": { "x": -6, "y": 149, "w": 16, "h": 8 },
+        "label": "Wejście",
+        "visible": false
+      }
+    ],
+    "products": {
+      "awokado": 2,
+      "banan": 2,
+      "batony": 3,
+      "biała fasola": 2,
+      "borówki": 2,
+      "bułki": 1,
+      "buraki": 2,
+      "cebula": 2,
+      "cebula czerwona": 2,
+      "chipsy": 9,
+      "chleb": 1,
+      "cytryny": 2,
+      "czekolada": 3,
+      "czerwona fasola": 2,
+      "czerwona kapusta": 2,
+      "czosnek": 2,
+      "dżem": 7,
+      "elektrolity": 12,
+      "energetyk": 10,
+      "feta": 5,
+      "frankfurterki": 3,
+      "groszek": 2,
+      "gyros": 2,
+      "halloumi": 5,
+      "herbata": 4,
+      "imbir": 2,
+      "jabłka": 2,
+      "jager": 9,
+      "jajka": 7,
+      "jogurty": 6,
+      "kapusta kiszona": 2,
+      "kawa": 4,
+      "ketchup": 2,
+      "kiełbasa": 3,
+      "kiwi": 2,
+      "koncentrat pomidorowy": 2,
+      "koperek": 2,
+      "kukurydza": 2,
+      "kurczak": 5,
+      "kurki": 2,
+      "limonka": 2,
+      "łosoś": 5,
+      "łosoś wędzony": 5,
+      "majeranek": 2,
+      "majonez": 2,
+      "makaron rosołowy": 8,
+      "makaron ryżowy": 8,
+      "makaron spaghetti": 8,
+      "makaron świderki": 8,
+      "marchewka": 2,
+      "mięso mielone": 5,
+      "mięso rosołowe": 5,
+      "młode listki": 3,
+      "mozzarella": 5,
+      "mozzarella tarta": 5,
+      "musztarda": 2,
+      "nabłyszczacz do zmywarki": 11,
+      "ogóreczki": 2,
+      "ogórki": 2,
+      "olej": 2,
+      "oliwa primadonna": 2,
+      "oliwki": 2,
+      "orzechy włoskie": 9,
+      "owoce mrożone": 7,
+      "papier toaletowy": 7,
+      "papryczki": 2,
+      "papryka": 2,
+      "passata": 2,
+      "pesto": 2,
+      "pieczarki": 2,
+      "pinsa": 1,
+      "piratki": 3,
+      "piwo": 9,
+      "piwo 0": 9,
+      "płatki owsiane": 8,
+      "płyn do prania": 11,
+      "polędwiczki": 5,
+      "pomarańcze": 2,
+      "pomidory": 2,
+      "pomidory suszone": 2,
+      "recznik papierowy": 11,
+      "rukola": 3,
+      "rum": 9,
+      "salami": 3,
+      "schab": 5,
+      "ser": 5,
+      "serek wiejski": 5,
+      "sól": 2,
+      "sriracha": 2,
+      "szpinak": 3,
+      "szynka": 5,
+      "śmietana": 6,
+      "tabletki do zmywarki": 11,
+      "tampony": 11,
+      "tofu": 3,
+      "tortellini": null,
+      "tortille": 1,
+      "tuńczyk": 2,
+      "twaróg": 6,
+      "uszka": 7,
+      "wątróbka": 5,
+      "whisky": 9,
+      "wino": 9,
+      "wino bezalkoholowe": 9,
+      "worki na śmieci": 11,
+      "ziemniaki": 2
+    }
+  }
+}

@@ -1,1 +1,15 @@
-{}
+{
+  "mizeria": {
+    "aliases": [],
+    "ingredients": ["ogórki", "śmietana"]
+  },
+  "spaghetti": {
+    "aliases": [],
+    "ingredients": [
+      "mięso mielone",
+      "passata",
+      "koncentrat pomidorowy",
+      "makaron spaghetti"
+    ]
+  }
+}

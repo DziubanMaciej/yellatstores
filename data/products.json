@@ -1,1 +1,344 @@
-{}
+{
+  "awokado": {
+    "aliases": ["avoda"]
+  },
+  "banan": {
+    "aliases": ["banany"]
+  },
+  "bao": {
+    "aliases": []
+  },
+  "barszcz": {
+    "aliases": ["barszczyk"]
+  },
+  "batony": {
+    "aliases": ["baton"]
+  },
+  "biała fasola": {
+    "aliases": []
+  },
+  "borówki": {
+    "aliases": []
+  },
+  "bób": {
+    "aliases": []
+  },
+  "bułki": {
+    "aliases": []
+  },
+  "buraki": {
+    "aliases": ["burak"]
+  },
+  "cebula": {
+    "aliases": ["cebula biała"]
+  },
+  "cebula czerwona": {
+    "aliases": []
+  },
+  "chipsy": {
+    "aliases": ["czipsy"]
+  },
+  "chleb": {
+    "aliases": []
+  },
+  "cukier": {
+    "aliases": []
+  },
+  "cukier wanilinowy": {
+    "aliases": []
+  },
+  "cytryny": {
+    "aliases": ["cytryna"]
+  },
+  "czekolada": {
+    "aliases": []
+  },
+  "czerwona fasola": {
+    "aliases": ["fasola"]
+  },
+  "czerwona kapusta": {
+    "aliases": ["kapusta czerwona"]
+  },
+  "czosnek": {
+    "aliases": []
+  },
+  "dezodorant": {
+    "aliases": ["antyperspirant"]
+  },
+  "dżem": {
+    "aliases": []
+  },
+  "elektrolity": {
+    "aliases": []
+  },
+  "energetyk": {
+    "aliases": ["redbul", "redbull", "black", "dzik"]
+  },
+  "feta": {
+    "aliases": []
+  },
+  "frankfurterki": {
+    "aliases": ["kiełbaski"]
+  },
+  "groszek": {
+    "aliases": []
+  },
+  "gyros": {
+    "aliases": ["przyprawa gyros", "przyprawa gyrosa", "przyprawa do gyrosa"]
+  },
+  "halloumi": {
+    "aliases": ["halumi", "hallumi", "haloumi"]
+  },
+  "herbata": {
+    "aliases": []
+  },
+  "imbir": {
+    "aliases": []
+  },
+  "jabłka": {
+    "aliases": []
+  },
+  "jager": {
+    "aliases": []
+  },
+  "jajka": {
+    "aliases": []
+  },
+  "jogurty": {
+    "aliases": []
+  },
+  "kapusta kiszona": {
+    "aliases": []
+  },
+  "kawa": {
+    "aliases": []
+  },
+  "ketchup": {
+    "aliases": ["keczup", "kechup"]
+  },
+  "kiełbasa": {
+    "aliases": []
+  },
+  "kiwi": {
+    "aliases": []
+  },
+  "koncentrat pomidorowy": {
+    "aliases": ["koncentrat"]
+  },
+  "koperek": {
+    "aliases": []
+  },
+  "kukurydza": {
+    "aliases": []
+  },
+  "kurczak": {
+    "aliases": []
+  },
+  "kurki": {
+    "aliases": []
+  },
+  "limonka": {
+    "aliases": ["limonki"]
+  },
+  "łosoś": {
+    "aliases": []
+  },
+  "łosoś wędzony": {
+    "aliases": []
+  },
+  "majeranek": {
+    "aliases": []
+  },
+  "majonez": {
+    "aliases": []
+  },
+  "makaron rosołowy": {
+    "aliases": ["makaron do rosołu", "makaron na rosół"]
+  },
+  "makaron ryżowy": {
+    "aliases": ["makaron biały", "biały makaron"]
+  },
+  "makaron spaghetti": {
+    "aliases": ["makaron"]
+  },
+  "makaron świderki": {
+    "aliases": ["świderki"]
+  },
+  "marchewka": {
+    "aliases": ["marchew"]
+  },
+  "mięso mielone": {
+    "aliases": []
+  },
+  "mięso rosołowe": {
+    "aliases": ["mięso do rosołu", "mięso na rosół", "mieso rosół"]
+  },
+  "młode listki": {
+    "aliases": ["sałata", "listki"]
+  },
+  "mozzarella": {
+    "aliases": []
+  },
+  "mozzarella tarta": {
+    "aliases": []
+  },
+  "musztarda": {
+    "aliases": []
+  },
+  "nabłyszczacz do zmywarki": {
+    "aliases": ["nabłyszczacz", "nabłyszczacz zmywarki"]
+  },
+  "ogóreczki": {
+    "aliases": []
+  },
+  "ogórki": {
+    "aliases": ["ogórek"]
+  },
+  "olej": {
+    "aliases": []
+  },
+  "oliwa primadonna": {
+    "aliases": ["oliwa"]
+  },
+  "oliwki": {
+    "aliases": []
+  },
+  "orzechy włoskie": {
+    "aliases": []
+  },
+  "owoce mrożone": {
+    "aliases": ["mrożone owoce"]
+  },
+  "papier toaletowy": {
+    "aliases": []
+  },
+  "papryczki": {
+    "aliases": ["jalapeno", "papryczki jalapeno"]
+  },
+  "papryka": {
+    "aliases": []
+  },
+  "passata": {
+    "aliases": ["pasata"]
+  },
+  "pasta do zębów": {
+    "aliases": ["pasta"]
+  },
+  "pestki dyni": {
+    "aliases": []
+  },
+  "pesto": {
+    "aliases": []
+  },
+  "pieczarki": {
+    "aliases": []
+  },
+  "pinsa": {
+    "aliases": []
+  },
+  "piratki": {
+    "aliases": []
+  },
+  "piwo": {
+    "aliases": ["piwko"]
+  },
+  "piwo 0": {
+    "aliases": []
+  },
+  "płatki owsiane": {
+    "aliases": []
+  },
+  "płyn do prania": {
+    "aliases": []
+  },
+  "polędwiczki": {
+    "aliases": []
+  },
+  "pomarańcze": {
+    "aliases": []
+  },
+  "pomidory": {
+    "aliases": ["pomidor"]
+  },
+  "pomidory suszone": {
+    "aliases": []
+  },
+  "recznik papierowy": {
+    "aliases": ["reczniki papierowe", "reczniki"]
+  },
+  "rukola": {
+    "aliases": []
+  },
+  "rum": {
+    "aliases": []
+  },
+  "salami": {
+    "aliases": []
+  },
+  "schab": {
+    "aliases": []
+  },
+  "ser": {
+    "aliases": ["ser żółty"]
+  },
+  "serek wiejski": {
+    "aliases": ["serki wiejskie"]
+  },
+  "sól": {
+    "aliases": []
+  },
+  "sriracha": {
+    "aliases": []
+  },
+  "szpinak": {
+    "aliases": ["szpinak baby"]
+  },
+  "szynka": {
+    "aliases": ["wędlina"]
+  },
+  "śmietana": {
+    "aliases": []
+  },
+  "tabletki do zmywarki": {
+    "aliases": ["tabletki zmywarki"]
+  },
+  "tampony": {
+    "aliases": []
+  },
+  "tofu": {
+    "aliases": []
+  },
+  "tortellini": {
+    "aliases": ["tortelini", "torteloni", "tortelloni"]
+  },
+  "tortille": {
+    "aliases": ["tortilla", "tortila", "tortile"]
+  },
+  "tuńczyk": {
+    "aliases": ["tucznik"]
+  },
+  "twaróg": {
+    "aliases": []
+  },
+  "uszka": {
+    "aliases": []
+  },
+  "wątróbka": {
+    "aliases": []
+  },
+  "whisky": {
+    "aliases": ["whiskey", "łycha"]
+  },
+  "wino": {
+    "aliases": []
+  },
+  "wino bezalkoholowe": {
+    "aliases": []
+  },
+  "worki na śmieci": {
+    "aliases": ["worki"]
+  },
+  "ziemniaki": {
+    "aliases": []
+  }
+}
