@@ -96,3 +96,10 @@ Small choices made while building the editor. Each is easy to change.
 | Validate | When formatting is the only problem (after a hand edit), "Validate data" offers to rewrite the files. |
 | Initial data | `data/` starts as empty `{}` files; no made-up sample store. |
 | End of input | Ctrl+D in the editor exits cleanly (everything is saved after each change anyway). |
+
+## Round 5 (2026-10-21)
+
+| Topic | Decision |
+|-------|----------|
+| Layout editing | One browser page for create and edit. Drag to draw, then a popup asks for the kind and name (no typing beforehand). Drag to move; corner handles to resize. Replaces the separate "Redraw a section/decoration" options. |
+| Collisions | Rects too close together are marked red, and saving is refused until there are none. The same applies to newly drawn rects (Claude's extension of the rule, for consistency). |

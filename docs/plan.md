@@ -100,13 +100,13 @@ and the CLAUDE.md commands.
 - E7 view store: map + alphabetical products per section, not carried, unassigned
 
 ## Phase 4: Drawing ✅
-- `scripts/web/draw.*` in two modes:
-  - **add**: any number of sections/decorations
-  - **redraw**: one rect, with the old position shown dashed
-- Rects closer than 1 unit to anything are refused.
-- Also: Undo, More space, Cancel, Done.
-- E1 create store, and E2 edit store layout: add, redraw a section or decoration, rename a
-  section (its assignments follow), change a decoration label.
+- `scripts/web/draw.*`, one layout page:
+  - Drag on empty space to draw, then a popup asks for the kind (section/decoration) and the name.
+  - Drag a rect to move it. Select it and drag a corner handle to resize.
+  - Rects closer than 1 unit turn red, and Done refuses to save while any are red.
+  - Also: Undo (covers drawing, moving and resizing), More space, Cancel, Done. Returns the whole layout.
+- E1 create store, and E2 edit store layout: edit the layout in the browser, rename a section
+  (its assignments follow), change a decoration label.
 
 ## Phase 5: Real data + fill-aliases skill
 1. Polish `.claude/skills/fill-aliases/SKILL.md` (draft exists, see [skills.md](skills.md)).

@@ -19,9 +19,8 @@ const CONTENT_TYPES = {
 // open(url) shows the page; tests replace it with code that plays the page's part.
 export function createBrowser({ open = openInSystemBrowser } = {}) {
   return {
-    // params: { title, layout: { sections, decorations }, ghost, target } (see scripts/web/draw.js)
-    // Resolves to { sections, decorations } of newly drawn items, { rect } when redrawing,
-    // or null when cancelled.
+    // params: { title, layout: { sections, decorations } } (see scripts/web/draw.js)
+    // Resolves to the whole edited layout { sections, decorations }, or null when cancelled.
     drawLayout: (params) => runPage('draw.html', params, open),
     // params: buildStoreView() output. Resolves when the page is closed.
     showStore: (params) => runPage('view.html', params, open),

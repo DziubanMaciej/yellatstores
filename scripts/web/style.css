@@ -53,7 +53,6 @@ button.primary {
   vector-effect: non-scaling-stroke;
   stroke-width: 1.5px;
 }
-
 .store-map .section rect {
   fill: var(--section-fill);
   stroke: var(--section-stroke);
@@ -78,11 +77,6 @@ button.primary {
   fill: var(--muted);
 }
 
-.store-map .ghost rect {
-  fill: none;
-  stroke: var(--muted);
-  stroke-dasharray: 4 3;
-}
 
 /* View page */
 .view {
@@ -122,13 +116,6 @@ button.primary {
   margin-bottom: 12px;
 }
 
-.toolbar input[type='text'] {
-  font: inherit;
-  padding: 5px 8px;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-}
-
 .status {
   min-height: 1.4em;
   margin: 8px 0;
@@ -144,7 +131,7 @@ button.primary {
   cursor: crosshair;
 }
 
-/* Draw page: invisible decorations get a dashed outline so they can be seen while editing. */
+/* Layout page: invisible decorations get a dashed outline so they can be seen while editing. */
 #canvas .decoration.invisible rect {
   stroke: var(--decoration-stroke);
   stroke-dasharray: 2 2;
@@ -154,7 +141,65 @@ button.primary {
   fill: rgba(37, 99, 235, 0.15);
   stroke: var(--accent);
   stroke-dasharray: 4 2;
-  vector-effect: non-scaling-stroke;
+}
+
+/* Transparent layer over every rect that takes the mouse: drag to move. */
+#canvas .hit {
+  fill: transparent;
+  stroke: none;
+  cursor: move;
+}
+
+#canvas .hit.selected {
+  stroke: var(--accent);
+  stroke-width: 2.5px;
+}
+
+#canvas .hit.colliding {
+  fill: rgba(220, 38, 38, 0.3);
+  stroke: var(--error);
+  stroke-width: 2.5px;
+}
+
+#canvas .handle {
+  fill: #fff;
+  stroke: var(--accent);
+}
+
+#canvas .handle-nw,
+#canvas .handle-se {
+  cursor: nwse-resize;
+}
+
+#canvas .handle-ne,
+#canvas .handle-sw {
+  cursor: nesw-resize;
+}
+
+dialog {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 16px 20px;
+  min-width: 280px;
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+dialog input[type='text'] {
+  font: inherit;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 5px 8px;
+  margin-top: 4px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+
+dialog .kinds {
+  display: flex;
+  gap: 16px;
 }
 
 .done-message {

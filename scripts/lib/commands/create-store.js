@@ -17,8 +17,6 @@ export async function createStore(ctx) {
   const drawn = await ctx.browser.drawLayout({
     title: `New store "${name}"`,
     layout: { sections: [], decorations: [] },
-    ghost: null,
-    target: null,
   });
   if (drawn === null) {
     ctx.io.print('Cancelled.');

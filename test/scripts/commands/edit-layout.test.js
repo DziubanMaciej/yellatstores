@@ -2,51 +2,51 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { editLayout } from '../../../scripts/lib/commands/edit-layout.js';
 import { editorSession } from '../../helpers/editor.js';
+import { sampleData } from '../../helpers/sample-data.js';
 
 // Sample store: sections 1) Warzywa 2) Makarony 3) Nabiał; decorations 1) "Kasy" 2) "Wejście" (text only).
 // Each script starts with: store 1, then actions; ends with q to leave the action menu.
+// Actions: 1) edit in browser 2) rename a section 3) change a decoration label.
 
-test('adds new sections and decorations after the existing ones', async (t) => {
-  const drawn = {
-    sections: [{ name: 'Pieczywo', rect: { x: 30, y: 0, w: 4, h: 4 } }],
-    decorations: [{ rect: { x: 30, y: 6, w: 4, h: 1 } }],
-  };
-  const session = editorSession(t, { answers: ['1', '1', 'q'], pages: [drawn] });
+const sampleLayout = () => {
+  const { sections, decorations } = sampleData().stores['Lidl Główna'];
+  return { sections, decorations };
+};
+
+test('saves the layout edited in the browser: moved, resized and new rects', async (t) => {
+  const edited = sampleLayout();
+  edited.sections[0].rect = { x: 0, y: 20, w: 3, h: 3 }; // Warzywa moved and resized
+  edited.sections.push({ name: 'Pieczywo', rect: { x: 30, y: 0, w: 4, h: 4 } });
+  edited.decorations.push({ rect: { x: 30, y: 6, w: 4, h: 1 } });
+  const session = editorSession(t, { answers: ['1', '1', 'q'], pages: [edited] });
   await editLayout(session.ctx);
   const store = session.finish(assert).stores['Lidl Główna'];
-  assert.deepEqual(
-    store.sections.map((s) => s.name),
-    ['Warzywa', 'Makarony', 'Nabiał', 'Pieczywo'],
-  );
-  assert.equal(store.decorations.length, 3);
-  assert.equal(session.pageCalls[0].params.target, null);
-});
-
-test('redraws a section, keeping its name, position in the list and products', async (t) => {
-  const session = editorSession(t, { answers: ['1', '2', '1', 'q'], pages: [{ rect: { x: 0, y: 20, w: 3, h: 3 } }] });
-  await editLayout(session.ctx);
-  const store = session.finish(assert).stores['Lidl Główna'];
-  assert.deepEqual(store.sections[0], { name: 'Warzywa', rect: { x: 0, y: 20, w: 3, h: 3 } });
+  assert.deepEqual(store.sections, edited.sections);
+  assert.deepEqual(store.decorations, edited.decorations);
   assert.equal(store.products.pomidory, 'Warzywa');
-  const { params } = session.pageCalls[0];
-  assert.deepEqual(params.target, { kind: 'section', name: 'Warzywa' });
-  assert.deepEqual(params.ghost, { x: 0, y: 0, w: 10, h: 8 });
-  assert.deepEqual(
-    params.layout.sections.map((s) => s.name),
-    ['Makarony', 'Nabiał'],
-  );
+  assert.deepEqual(session.pageCalls[0].params.layout, sampleLayout());
 });
 
-test('redraws a decoration', async (t) => {
-  const session = editorSession(t, { answers: ['1', '3', '2', 'q'], pages: [{ rect: { x: 30, y: 30, w: 5, h: 2 } }] });
+test('a layout with rects too close together is not saved', async (t) => {
+  const edited = sampleLayout();
+  edited.sections[1].rect.x = 10; // touches Warzywa
+  const session = editorSession(t, { answers: ['1', '1', 'q'], pages: [edited] });
   await editLayout(session.ctx);
   const store = session.finish(assert).stores['Lidl Główna'];
-  assert.deepEqual(store.decorations[1], { rect: { x: 30, y: 30, w: 5, h: 2 }, label: 'Wejście', visible: false });
-  assert.deepEqual(session.pageCalls[0].params.target, { kind: 'decoration', label: 'Wejście', visible: false });
+  assert.equal(store.sections[1].rect.x, 12);
+  assert.ok(session.output.some((line) => /closer than 1 unit/.test(line)));
+});
+
+test('cancelling in the browser changes nothing', async (t) => {
+  const session = editorSession(t, { answers: ['1', '1', 'q'], pages: [null] });
+  await editLayout(session.ctx);
+  const store = session.finish(assert).stores['Lidl Główna'];
+  assert.deepEqual({ sections: store.sections, decorations: store.decorations }, sampleLayout());
+  assert.ok(session.output.includes('Cancelled.'));
 });
 
 test('renaming a section moves its product assignments along', async (t) => {
-  const session = editorSession(t, { answers: ['1', '4', '2', 'Makarony i kasze', 'q'] });
+  const session = editorSession(t, { answers: ['1', '2', '2', 'Makarony i kasze', 'q'] });
   await editLayout(session.ctx);
   const store = session.finish(assert).stores['Lidl Główna'];
   assert.equal(store.sections[1].name, 'Makarony i kasze');
@@ -54,7 +54,7 @@ test('renaming a section moves its product assignments along', async (t) => {
 });
 
 test('renaming to an existing section name is refused', async (t) => {
-  const session = editorSession(t, { answers: ['1', '4', '2', 'warzywa', 'q'] });
+  const session = editorSession(t, { answers: ['1', '2', '2', 'warzywa', 'q'] });
   await editLayout(session.ctx);
   const store = session.finish(assert).stores['Lidl Główna'];
   assert.equal(store.sections[1].name, 'Makarony');
@@ -62,7 +62,7 @@ test('renaming to an existing section name is refused', async (t) => {
 });
 
 test('changes and removes decoration labels, but a text-only decoration keeps its label', async (t) => {
-  const session = editorSession(t, { answers: ['1', '5', '1', 'Kasy samoobsługowe', '5', '1', '', '5', '2', '', 'q'] });
+  const session = editorSession(t, { answers: ['1', '3', '1', 'Kasy samoobsługowe', '3', '1', '', '3', '2', '', 'q'] });
   await editLayout(session.ctx);
   const store = session.finish(assert).stores['Lidl Główna'];
   assert.equal(store.decorations[0].label, undefined);

@@ -20,10 +20,10 @@ function fakePage(result, seen) {
 
 test('drawLayout serves the page and params and resolves with the posted result', async () => {
   const seen = {};
-  const browser = createBrowser({ open: fakePage({ rect: { x: 1, y: 2, w: 3, h: 4 } }, seen) });
-  const params = { title: 'T', layout: { sections: [], decorations: [] }, ghost: null, target: null };
+  const browser = createBrowser({ open: fakePage({ sections: [], decorations: [] }, seen) });
+  const params = { title: 'T', layout: { sections: [], decorations: [] } };
   const result = await browser.drawLayout(params);
-  assert.deepEqual(result, { rect: { x: 1, y: 2, w: 3, h: 4 } });
+  assert.deepEqual(result, { sections: [], decorations: [] });
   assert.match(seen.html, /<script type="module" src="draw.js">/);
   assert.equal(seen.module.status, 200);
   assert.match(seen.module.headers.get('content-type'), /javascript/);

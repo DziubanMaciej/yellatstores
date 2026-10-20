@@ -1,6 +1,6 @@
 // Store map as an SVG string. Shared by the site and the editor's browser pages.
 // Styling is left to CSS via the classes below:
-//   .store-map, .section, .decoration, .invisible (decoration with visible: false), .ghost
+//   .store-map, .section, .decoration, .invisible (decoration with visible: false)
 
 import { boundsOf, expandRect } from './geometry.js';
 
@@ -21,8 +21,7 @@ export function fitViewBox(layout) {
 }
 
 // layout: { sections, decorations } as in stores.json.
-// ghost: optional rect drawn dashed, e.g. the old position of a section being redrawn.
-export function renderLayoutSvg(layout, { viewBox = fitViewBox(layout), ghost = null } = {}) {
+export function renderLayoutSvg(layout, { viewBox = fitViewBox(layout) } = {}) {
   const baseFontSize = Math.max(viewBox.w, viewBox.h) / 40;
   const parts = [];
   for (const decoration of layout.decorations) {
@@ -35,9 +34,6 @@ export function renderLayoutSvg(layout, { viewBox = fitViewBox(layout), ghost = 
       `<g class="section" data-section="${escapeXml(section.name)}">` +
         `${renderRect(section.rect)}${renderLabel(section.name, section.rect, baseFontSize)}</g>`,
     );
-  }
-  if (ghost !== null) {
-    parts.push(`<g class="ghost">${renderRect(ghost)}</g>`);
   }
   const vb = [viewBox.x, viewBox.y, viewBox.w, viewBox.h].map(formatNumber).join(' ');
   return `<svg xmlns="http://www.w3.org/2000/svg" class="store-map" viewBox="${vb}">${parts.join('')}</svg>`;

@@ -29,9 +29,9 @@ test('renderLayoutSvg rotates labels of tall rects', () => {
   assert.match(svg, /rotate\(-90 14 4\)">Makarony</);
 });
 
-test('renderLayoutSvg escapes names and draws an optional ghost rect', () => {
+test('renderLayoutSvg escapes names and accepts a custom view box', () => {
   const layout = { sections: [{ name: 'A & <B>', rect: { x: 0, y: 0, w: 4, h: 2 } }], decorations: [] };
-  const svg = renderLayoutSvg(layout, { ghost: { x: 5, y: 5, w: 1, h: 1 } });
+  const svg = renderLayoutSvg(layout, { viewBox: { x: -1, y: -1, w: 50, h: 30 } });
   assert.match(svg, />A &amp; &lt;B&gt;</);
-  assert.match(svg, /<g class="ghost"><rect x="5" y="5"/);
+  assert.match(svg, /viewBox="-1 -1 50 30"/);
 });

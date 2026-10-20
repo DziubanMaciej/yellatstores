@@ -52,7 +52,10 @@ export function createTerminalIo() {
   // The line iterator buffers input, so piped answers aren't lost while no prompt is pending.
   const lines = rl[Symbol.asyncIterator]();
   const readLine = async (prompt) => {
-    process.stdout.write(prompt);
+    // The prompt must go through readline: it redraws the line on edits like backspace,
+    // and would erase text it doesn't know about.
+    rl.setPrompt(prompt);
+    rl.prompt();
     const { value, done } = await lines.next();
     if (done) {
       // End of input (Ctrl+D). Every change is already saved, so just leave.

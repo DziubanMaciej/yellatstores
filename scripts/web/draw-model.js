@@ -1,58 +1,37 @@
 // Pure rules of the drawing page, kept apart from the DOM so they can be tested in Node.
+// The page works on a flat list of items:
+//   { kind: 'section', name, rect } | { kind: 'decoration', label?, visible?, rect }
 
-import { boundsOf, expandRect, MIN_GAP, tooClose } from '../../site/lib/geometry.js';
+import { boundsOf, expandRect, rectFromPoints, tooClose } from '../../site/lib/geometry.js';
 import { EMPTY_VIEW_BOX, layoutRects } from '../../site/lib/map.js';
 import { normalize } from '../../site/lib/normalize.js';
 
 // Area shown for drawing: everything already there plus room around it.
-export function drawingArea(layout, ghost) {
-  const rects = layoutRects(layout);
-  if (ghost !== null) {
-    rects.push(ghost);
-  }
-  const bounds = boundsOf(rects);
+export function drawingArea(layout) {
+  const bounds = boundsOf(layoutRects(layout));
   if (bounds === null) {
     return { ...EMPTY_VIEW_BOX };
   }
   return expandRect(bounds, Math.max(5, Math.max(bounds.w, bounds.h) * 0.15));
 }
 
-// item: { kind: 'section' | 'decoration', name?, label?, visible?, rect }
-// Returns why the item can't be added to the layout, or null if it can.
-export function checkNewItem(item, layout) {
-  if (item.rect.w < 1 || item.rect.h < 1) {
-    return 'Too small. Drag a bigger rectangle.';
-  }
-  if (item.kind === 'section') {
-    if (!item.name) {
-      return 'Type a section name first.';
-    }
-    if (layout.sections.some((section) => normalize(section.name) === normalize(item.name))) {
-      return `There already is a section "${item.name}".`;
-    }
-  } else if (item.visible === false && !item.label) {
-    return 'A text-only decoration needs a label.';
-  }
-  for (const section of layout.sections) {
-    if (tooClose(item.rect, section.rect)) {
-      return `Too close to section "${section.name}". Keep at least ${MIN_GAP} unit of space.`;
-    }
-  }
-  for (const decoration of layout.decorations) {
-    if (tooClose(item.rect, decoration.rect)) {
-      const name = decoration.label === undefined ? 'a decoration' : `decoration "${decoration.label}"`;
-      return `Too close to ${name}. Keep at least ${MIN_GAP} unit of space.`;
-    }
-  }
-  return null;
+export function itemsFromLayout(layout) {
+  return [
+    ...layout.sections.map((section) => ({ kind: 'section', name: section.name, rect: section.rect })),
+    ...layout.decorations.map((decoration) => ({ kind: 'decoration', ...decoration })),
+  ];
 }
 
-// Converts a drawn item to its stores.json form.
-export function toSection(item) {
-  return { name: item.name, rect: item.rect };
+// Back to the stores.json form. Relative order within sections and decorations is kept,
+// so existing items stay where they were and new ones end up last.
+export function layoutFromItems(items) {
+  return {
+    sections: items.filter((i) => i.kind === 'section').map((i) => ({ name: i.name, rect: i.rect })),
+    decorations: items.filter((i) => i.kind === 'decoration').map(toDecoration),
+  };
 }
 
-export function toDecoration(item) {
+function toDecoration(item) {
   const decoration = { rect: item.rect };
   if (item.label) {
     decoration.label = item.label;
@@ -61,4 +40,54 @@ export function toDecoration(item) {
     decoration.visible = false;
   }
   return decoration;
+}
+
+// Returns why a newly drawn item can't be added, or null if it can.
+// Distance to other rects isn't checked here: collisions are allowed while editing
+// (see findCollisions) and only block saving.
+export function checkNewItem(item, items) {
+  if (item.rect.w < 1 || item.rect.h < 1) {
+    return 'Too small. Drag a bigger rectangle.';
+  }
+  if (item.kind === 'section') {
+    if (!item.name) {
+      return 'Type a section name first.';
+    }
+    const taken = items.some((other) => other.kind === 'section' && normalize(other.name) === normalize(item.name));
+    if (taken) {
+      return `There already is a section "${item.name}".`;
+    }
+  } else if (item.visible === false && !item.label) {
+    return 'A text-only decoration needs a label.';
+  }
+  return null;
+}
+
+// Indexes of items closer than the minimum gap to any other item.
+export function findCollisions(items) {
+  const colliding = new Set();
+  for (let i = 0; i < items.length; i++) {
+    for (let j = i + 1; j < items.length; j++) {
+      if (tooClose(items[i].rect, items[j].rect)) {
+        colliding.add(i);
+        colliding.add(j);
+      }
+    }
+  }
+  return colliding;
+}
+
+export function movedRect(rect, dx, dy) {
+  return { ...rect, x: rect.x + Math.round(dx), y: rect.y + Math.round(dy) };
+}
+
+// Resizes by dragging one corner ('nw', 'ne', 'sw' or 'se') to point; the opposite corner stays.
+// The result is at least 1×1 unit.
+export function resizedRect(rect, corner, point) {
+  const fixed = {
+    x: corner.includes('w') ? rect.x + rect.w : rect.x,
+    y: corner.includes('n') ? rect.y + rect.h : rect.y,
+  };
+  const result = rectFromPoints(fixed, point);
+  return { ...result, w: Math.max(1, result.w), h: Math.max(1, result.h) };
 }

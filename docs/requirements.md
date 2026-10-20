@@ -111,8 +111,16 @@ tests run them with scripted answers against a temporary data directory.
 
 | # | Command | Description |
 |---|---------|-------------|
-| E1 | **Create store** | Enter a name. Then the drawing page opens: draw sections (drag a rect, enter a name) and decorations (dimmer, optional label, visible checkbox). Any overlap is refused. |
-| E2 | **Edit store layout** | Pick a store, then a section or decoration. You can add a new one, **redraw** an existing one from scratch (a section keeps its name and products), or rename one (a section's product assignments follow the new name). No removing. |
+| E1 | **Create store** | Enter a name, then the layout page opens (see below). |
+| E2 | **Edit store layout** | Pick a store, then **edit the layout in the browser** (add, move, resize), **rename a section** (its product assignments follow the new name), or **change a decoration label**. No removing. |
+
+**Layout page** (used by E1 and E2):
+- Drag on empty space to draw a rect. A popup then asks: section or decoration, its name or label,
+  and for decorations whether to draw the box or show text only.
+- Drag a rect to move it. Select it and drag a corner handle to resize it. Coordinates are whole units.
+- Rects closer than 1 unit to another rect are shown **red**, and **Done refuses to save** while any
+  are red.
+- Undo (drawing, moving and resizing), More space, Cancel, Done.
 | E3 | **Add product** | Name and aliases. Rejects anything that collides after normalisation. |
 | E4 | **Add aliases** | Pick a product **or recipe** and add aliases. |
 | E5 | **Add recipe** | Name, aliases, ingredients picked from products. |
