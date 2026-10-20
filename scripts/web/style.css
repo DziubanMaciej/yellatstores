@@ -96,9 +96,26 @@ button.primary {
   align-items: start;
 }
 
+/* The list scrolls on its own, so the map and the Close button stay in view. */
+.view .side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-height: calc(100vh - 80px);
+}
+
+.view .side .groups {
+  align-self: stretch;
+  overflow-y: auto;
+}
+
 @media (max-width: 700px) {
   .view {
     grid-template-columns: 1fr;
+  }
+
+  .view .side {
+    max-height: none;
   }
 }
 
