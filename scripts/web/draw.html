@@ -22,7 +22,8 @@
 
     <dialog id="item-dialog">
       <form id="item-form">
-        <p class="kinds">
+        <h2 id="dialog-title"></h2>
+        <p class="kinds" id="kinds">
           <label><input type="radio" name="kind" value="section" checked /> Section</label>
           <label><input type="radio" name="kind" value="decoration" /> Decoration</label>
         </p>
@@ -35,7 +36,7 @@
         <p id="dialog-error" class="status error"></p>
         <div class="toolbar">
           <button type="button" id="dialog-cancel">Cancel</button>
-          <button type="submit" class="primary">Add</button>
+          <button type="submit" class="primary" id="dialog-submit">Add</button>
         </div>
       </form>
     </dialog>

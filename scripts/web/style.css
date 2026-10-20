@@ -12,6 +12,11 @@
   color: var(--ink);
 }
 
+/* Elements with display rules below must still hide when given the hidden attribute. */
+[hidden] {
+  display: none !important;
+}
+
 body {
   margin: 0;
   padding: 16px;
@@ -195,6 +200,11 @@ dialog input[type='text'] {
   margin-top: 4px;
   border: 1px solid var(--line);
   border-radius: 6px;
+}
+
+dialog h2 {
+  font-size: 1.05rem;
+  margin: 0 0 8px;
 }
 
 dialog .kinds {

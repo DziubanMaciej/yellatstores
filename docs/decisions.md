@@ -103,3 +103,4 @@ Small choices made while building the editor. Each is easy to change.
 |-------|----------|
 | Layout editing | One browser page for create and edit. Drag to draw, then a popup asks for the kind and name (no typing beforehand). Drag to move; corner handles to resize. Replaces the separate "Redraw a section/decoration" options. |
 | Collisions | Rects too close together are marked red, and saving is refused until there are none. The same applies to newly drawn rects (Claude's extension of the rule, for consistency). |
+| Renaming | Click a rect on the layout page to rename it (decorations: label and box/text-only too). The terminal's "Rename a section" and "Change a decoration label" options were removed as redundant, so "Edit store layout" opens the page directly (Claude's call, following the earlier choice to drop redundant options). |

@@ -103,10 +103,11 @@ and the CLAUDE.md commands.
 - `scripts/web/draw.*`, one layout page:
   - Drag on empty space to draw, then a popup asks for the kind (section/decoration) and the name.
   - Drag a rect to move it. Select it and drag a corner handle to resize.
+  - Click a rect to rename it (decorations: label and box/text-only too).
   - Rects closer than 1 unit turn red, and Done refuses to save while any are red.
-  - Also: Undo (covers drawing, moving and resizing), More space, Cancel, Done. Returns the whole layout.
-- E1 create store, and E2 edit store layout: edit the layout in the browser, rename a section
-  (its assignments follow), change a decoration label.
+  - Also: Undo (covers every change), More space, Cancel, Done. Returns the whole layout plus
+    section renames, so that assigned products follow renamed sections.
+- E1 create store and E2 edit store layout both open this page directly.
 
 ## Phase 5: Real data + fill-aliases skill
 1. Polish `.claude/skills/fill-aliases/SKILL.md` (draft exists, see [skills.md](skills.md)).

@@ -1,6 +1,7 @@
 // Pure rules of the drawing page, kept apart from the DOM so they can be tested in Node.
 // The page works on a flat list of items:
-//   { kind: 'section', name, rect } | { kind: 'decoration', label?, visible?, rect }
+//   { kind: 'section', name, originalName?, rect } | { kind: 'decoration', label?, visible?, rect }
+// originalName is the name a section had when the page opened, to detect renames.
 
 import { boundsOf, expandRect, rectFromPoints, tooClose } from '../../site/lib/geometry.js';
 import { EMPTY_VIEW_BOX, layoutRects } from '../../site/lib/map.js';
@@ -17,7 +18,12 @@ export function drawingArea(layout) {
 
 export function itemsFromLayout(layout) {
   return [
-    ...layout.sections.map((section) => ({ kind: 'section', name: section.name, rect: section.rect })),
+    ...layout.sections.map((section) => ({
+      kind: 'section',
+      name: section.name,
+      originalName: section.name,
+      rect: section.rect,
+    })),
     ...layout.decorations.map((decoration) => ({ kind: 'decoration', ...decoration })),
   ];
 }
@@ -31,6 +37,17 @@ export function layoutFromItems(items) {
   };
 }
 
+// { oldName: newName } for every existing section renamed on the page.
+export function sectionRenames(items) {
+  const renames = {};
+  for (const item of items) {
+    if (item.kind === 'section' && item.originalName !== undefined && item.originalName !== item.name) {
+      renames[item.originalName] = item.name;
+    }
+  }
+  return renames;
+}
+
 function toDecoration(item) {
   const decoration = { rect: item.rect };
   if (item.label) {
@@ -42,10 +59,10 @@ function toDecoration(item) {
   return decoration;
 }
 
-// Returns why a newly drawn item can't be added, or null if it can.
+// Returns why an item (newly drawn, or items[index] after editing) isn't acceptable, or null.
 // Distance to other rects isn't checked here: collisions are allowed while editing
 // (see findCollisions) and only block saving.
-export function checkNewItem(item, items) {
+export function checkItem(item, items, index = -1) {
   if (item.rect.w < 1 || item.rect.h < 1) {
     return 'Too small. Drag a bigger rectangle.';
   }
@@ -53,7 +70,9 @@ export function checkNewItem(item, items) {
     if (!item.name) {
       return 'Type a section name first.';
     }
-    const taken = items.some((other) => other.kind === 'section' && normalize(other.name) === normalize(item.name));
+    const taken = items.some(
+      (other, i) => i !== index && other.kind === 'section' && normalize(other.name) === normalize(item.name),
+    );
     if (taken) {
       return `There already is a section "${item.name}".`;
     }

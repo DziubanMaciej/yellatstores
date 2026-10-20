@@ -112,12 +112,14 @@ tests run them with scripted answers against a temporary data directory.
 | # | Command | Description |
 |---|---------|-------------|
 | E1 | **Create store** | Enter a name, then the layout page opens (see below). |
-| E2 | **Edit store layout** | Pick a store, then **edit the layout in the browser** (add, move, resize), **rename a section** (its product assignments follow the new name), or **change a decoration label**. No removing. |
+| E2 | **Edit store layout** | Pick a store; the layout page opens. Products assigned to a renamed section follow the new name. No removing. |
 
 **Layout page** (used by E1 and E2):
 - Drag on empty space to draw a rect. A popup then asks: section or decoration, its name or label,
   and for decorations whether to draw the box or show text only.
 - Drag a rect to move it. Select it and drag a corner handle to resize it. Coordinates are whole units.
+- Click a rect (without moving it) to rename it in the same popup. For decorations the popup also
+  edits the label and the box/text-only setting. The kind of an existing rect can't change.
 - Rects closer than 1 unit to another rect are shown **red**, and **Done refuses to save** while any
   are red.
 - Undo (drawing, moving and resizing), More space, Cancel, Done.

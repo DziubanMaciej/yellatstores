@@ -1,13 +1,14 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  checkNewItem,
+  checkItem,
   drawingArea,
   findCollisions,
   itemsFromLayout,
   layoutFromItems,
   movedRect,
   resizedRect,
+  sectionRenames,
 } from '../../scripts/web/draw-model.js';
 import { sampleData } from '../helpers/sample-data.js';
 
@@ -40,7 +41,7 @@ test('items convert back to the same layout, new items appended per kind', () =>
 
 test('new items are checked for size and names, not for distance', () => {
   const items = itemsFromLayout(layout());
-  const check = (item) => checkNewItem(item, items);
+  const check = (item) => checkItem(item, items);
   assert.equal(check({ kind: 'section', name: 'Pieczywo', rect: rect(10, 0, 5, 5) }), null);
   assert.match(check({ kind: 'section', name: 'X', rect: rect(30, 0, 0, 5) }), /Too small/);
   assert.match(check({ kind: 'section', name: '', rect: rect(30, 0, 5, 5) }), /Type a section name/);
@@ -67,4 +68,21 @@ test('resizedRect keeps the opposite corner and a minimum size of 1', () => {
   assert.deepEqual(resizedRect(r, 'ne', { x: 10, y: 14 }), rect(10, 14, 1, 1));
   // Dragging past the fixed corner flips the rect instead of making it negative.
   assert.deepEqual(resizedRect(r, 'sw', { x: 16, y: 12 }), rect(14, 10, 2, 2));
+});
+
+test('an edited item may keep its own name but not take another section name', () => {
+  const items = itemsFromLayout(layout());
+  assert.equal(checkItem({ ...items[0], name: 'Warzywa' }, items, 0), null);
+  assert.equal(checkItem({ ...items[0], name: 'Warzywa i owoce' }, items, 0), null);
+  assert.match(checkItem({ ...items[0], name: 'makarony' }, items, 0), /already is a section/);
+});
+
+test('sectionRenames reports renamed existing sections only', () => {
+  const items = itemsFromLayout(layout());
+  items.push({ kind: 'section', name: 'Pieczywo', rect: rect(40, 0, 1, 1) });
+  assert.deepEqual(sectionRenames(items), {});
+  items[0].name = 'Makarony';
+  items[1].name = 'Warzywa';
+  items[3].label = 'Kasy 1-5'; // decorations don't count
+  assert.deepEqual(sectionRenames(items), { Warzywa: 'Makarony', Makarony: 'Warzywa' });
 });

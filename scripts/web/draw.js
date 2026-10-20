@@ -1,23 +1,28 @@
-// Store layout page: draw new sections/decorations, move and resize any rect.
+// Store layout page: draw new sections/decorations, move, resize and rename any rect.
 // - Drag on empty space draws a rect, then a popup asks for its kind and name.
 // - Drag a rect to move it; select it and drag a corner handle to resize it.
+// - Click a rect (without moving it) to rename it in the same popup.
 // - Rects closer than the minimum gap are shown red; Done refuses to save while any are red.
-// Finishes with the whole layout { sections, decorations }, or null when cancelled.
+// Finishes with { sections, decorations, renames } where renames maps old to new section
+// names, or with null when cancelled.
 
 import { rectFromPoints } from '../../site/lib/geometry.js';
 import { escapeXml, renderLayoutSvg } from '../../site/lib/map.js';
 import { finish, loadParams } from './api.js';
 import {
-  checkNewItem,
+  checkItem,
   drawingArea,
   findCollisions,
   itemsFromLayout,
   layoutFromItems,
   movedRect,
   resizedRect,
+  sectionRenames,
 } from './draw-model.js';
 
-const HELP = 'Drag on empty space to draw a rect. Drag a rect to move it, or its corner handles to resize it.';
+const HELP =
+  'Drag on empty space to draw a rect. Drag a rect to move it, or its corner handles to resize it. ' +
+  'Click a rect to rename it.';
 const CORNERS = ['nw', 'ne', 'sw', 'se'];
 
 const params = await loadParams();
@@ -27,6 +32,7 @@ const history = []; // earlier versions of items, for Undo
 let selected = null; // index of the selected item
 let drag = null; // current pointer gesture
 let pending = null; // drawn rect waiting for the popup
+let editing = null; // index of the item being renamed in the popup
 
 const $ = (id) => document.getElementById(id);
 const canvas = $('canvas');
@@ -129,10 +135,13 @@ canvas.addEventListener('pointerup', () => {
   if (finished.mode === 'draw') {
     if (finished.rect !== null && finished.rect.w >= 1 && finished.rect.h >= 1) {
       pending = finished.rect;
-      openDialog();
+      openDialog(null);
     }
   } else if (JSON.stringify(items[finished.index].rect) !== JSON.stringify(finished.original)) {
     history.push(finished.before);
+  } else if (finished.mode === 'move') {
+    // Pressed and released without moving: a click, so rename.
+    openDialog(finished.index);
   }
   render();
   reportCollisions();
@@ -158,16 +167,29 @@ function updateDialogKind() {
   $('visible-control').hidden = !decoration;
 }
 
-function openDialog() {
-  $('name').value = '';
+// index === null: name a newly drawn rect (pending). Otherwise edit items[index];
+// its kind can't change, since products may be assigned to a section.
+function openDialog(index) {
+  editing = index;
+  const item = index === null ? null : items[index];
+  if (item !== null) {
+    document.querySelector(`input[name="kind"][value="${item.kind}"]`).checked = true;
+    $('visible').checked = item.visible !== false;
+  }
+  $('kinds').hidden = item !== null;
+  $('dialog-title').textContent =
+    item === null ? 'New rect' : item.kind === 'section' ? 'Edit section' : 'Edit decoration';
+  $('dialog-submit').textContent = item === null ? 'Add' : 'Save';
+  $('name').value = item === null ? '' : ((item.kind === 'section' ? item.name : item.label) ?? '');
   $('dialog-error').textContent = '';
   updateDialogKind();
   dialog.showModal();
-  $('name').focus();
+  $('name').select();
 }
 
 function closeDialog() {
   pending = null;
+  editing = null;
   dialog.close();
   render();
 }
@@ -179,17 +201,22 @@ for (const radio of document.querySelectorAll('input[name="kind"]')) {
 $('item-form').addEventListener('submit', (event) => {
   event.preventDefault();
   const text = $('name').value.trim().replace(/\s+/g, ' ');
+  const base = editing === null ? { rect: pending } : items[editing];
   const item =
     selectedKind() === 'section'
-      ? { kind: 'section', name: text, rect: pending }
-      : { kind: 'decoration', label: text || undefined, visible: $('visible').checked, rect: pending };
-  const error = checkNewItem(item, items);
+      ? { ...base, kind: 'section', name: text }
+      : { ...base, kind: 'decoration', label: text || undefined, visible: $('visible').checked };
+  const error = checkItem(item, items, editing ?? -1);
   if (error !== null) {
     $('dialog-error').textContent = error;
     return;
   }
   history.push(structuredClone(items));
-  items.push(item);
+  if (editing === null) {
+    items.push(item);
+  } else {
+    items[editing] = item;
+  }
   closeDialog();
   reportCollisions();
 });
@@ -224,7 +251,7 @@ $('done').addEventListener('click', () => {
     setStatus('Some rects are too close to each other (red). Move them apart first.', true);
     return;
   }
-  finish(layoutFromItems(items));
+  finish({ ...layoutFromItems(items), renames: sectionRenames(items) });
 });
 
 render();
