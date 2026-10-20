@@ -1,58 +1,52 @@
+import { renderLayoutSvg } from '../../../site/lib/map.js';
 import { compareNames } from '../../../site/lib/normalize.js';
 import { pickStore } from '../input.js';
 
-// E6: go through the products not yet assigned in a store and put each into a section
-// (typed by its id, as shown on the map) or mark it as not carried. Every answer is saved
-// immediately.
+// E6: a browser page shows the products not yet assigned in a store, one at a time; clicking a
+// section on the map (or "Not in this store") assigns it. Every answer is saved immediately.
 export async function assignProducts(ctx) {
   const storeName = await pickStore(ctx);
   if (storeName === null) {
     return;
   }
-  const store = () => ctx.data.stores[storeName];
-  const unassigned = Object.keys(ctx.data.products)
-    .filter((product) => !Object.hasOwn(store().products, product))
+  const store = ctx.data.stores[storeName];
+  const products = Object.keys(ctx.data.products)
+    .filter((product) => !Object.hasOwn(store.products, product))
     .sort(compareNames);
-  if (unassigned.length === 0) {
+  if (products.length === 0) {
     ctx.io.print(`All products are already assigned in "${storeName}".`);
     return;
   }
 
-  const sections = store().sections;
-  const printSections = () => {
-    ctx.io.print(`Sections of "${storeName}" (id, name):`);
-    for (const section of sections) {
-      ctx.io.print(`  ${section.id}) ${section.name}`);
+  const sectionIds = new Set(store.sections.map((section) => section.id));
+  // Messages from the page: { product, section: id | null } or { product, unassign: true }.
+  const onMessage = (message) => {
+    if (!products.includes(message.product)) {
+      return { error: `Unknown product "${message.product}".` };
     }
-    ctx.io.print('  0) not in this store');
+    if (!message.unassign && message.section !== null && !sectionIds.has(message.section)) {
+      return { error: `Unknown section id ${message.section}.` };
+    }
+    const saved = ctx.change((data) => {
+      const assigned = data.stores[storeName].products;
+      if (message.unassign) {
+        delete assigned[message.product];
+      } else {
+        assigned[message.product] = message.section;
+      }
+    });
+    return saved ? { ok: true } : { error: 'Not saved, see the terminal.' };
   };
-  printSections();
 
-  for (const [index, product] of unassigned.entries()) {
-    for (;;) {
-      const answer = await ctx.io.ask(
-        `[${index + 1}/${unassigned.length}] ${product}: section id (s = skip, q = quit, ? = list):`,
-      );
-      if (answer === 'q') {
-        return;
-      }
-      if (answer === 's') {
-        break;
-      }
-      if (answer === '?') {
-        printSections();
-        continue;
-      }
-      const id = Number(answer);
-      if (answer === '' || !(id === 0 || sections.some((section) => section.id === id))) {
-        ctx.io.print('Invalid choice.');
-        continue;
-      }
-      ctx.change((data) => {
-        data.stores[storeName].products[product] = id === 0 ? null : id;
-      });
-      break;
-    }
-  }
-  ctx.io.print(`Done with "${storeName}".`);
+  await ctx.browser.assignProducts(
+    {
+      title: `Assign products in "${storeName}"`,
+      svg: renderLayoutSvg(store, { showIds: true }),
+      sections: store.sections.map(({ id, name }) => ({ id, name })),
+      products,
+    },
+    onMessage,
+  );
+  const left = products.filter((product) => !Object.hasOwn(ctx.data.stores[storeName].products, product));
+  ctx.io.print(`Done with "${storeName}". Still unassigned: ${left.length}.`);
 }

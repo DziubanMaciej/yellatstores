@@ -117,6 +117,38 @@ button.primary {
   font-style: italic;
 }
 
+/* Assign page */
+.assign-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.assign-bar .progress {
+  color: var(--muted);
+}
+
+.assign-bar .current-product {
+  font-size: 1.3rem;
+  margin-right: 8px;
+}
+
+.assign-map .section {
+  cursor: pointer;
+}
+
+.assign-map .section:hover rect {
+  fill: var(--accent);
+  fill-opacity: 0.35;
+}
+
+.assign-map.finished .section {
+  cursor: default;
+  pointer-events: none;
+}
+
 /* Draw page */
 .toolbar {
   display: flex;

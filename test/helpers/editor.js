@@ -7,7 +7,8 @@ import { validateDir } from '../../scripts/lib/validate.js';
 import { sampleData, tempDataDir } from './sample-data.js';
 
 // answers: what the user types, in order.
-// pages: results the browser pages return, in order (drawLayout/showStore calls).
+// pages: results the browser pages return, in order (drawLayout/showStore/assignProducts calls).
+// A function plays a page that sends messages: it gets (params, onMessage) and returns the result.
 export function editorSession(t, { answers = [], pages = [], data = sampleData() } = {}) {
   const { dir, cleanup } = tempDataDir(data);
   t.after(cleanup);
@@ -27,14 +28,19 @@ export function editorSession(t, { answers = [], pages = [], data = sampleData()
 
   const pageQueue = [...pages];
   const pageCalls = [];
-  const page = (kind) => async (params) => {
+  const page = (kind) => async (params, onMessage) => {
     pageCalls.push({ kind, params });
     if (pageQueue.length === 0) {
       throw new Error(`No scripted page result left for ${kind}`);
     }
-    return pageQueue.shift();
+    const result = pageQueue.shift();
+    return typeof result === 'function' ? result(params, onMessage) : result;
   };
-  const browser = { drawLayout: page('drawLayout'), showStore: page('showStore') };
+  const browser = {
+    drawLayout: page('drawLayout'),
+    showStore: page('showStore'),
+    assignProducts: page('assignProducts'),
+  };
 
   const ctx = createContext({ dir, io, browser });
   return {

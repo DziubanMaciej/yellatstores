@@ -62,3 +62,19 @@ test('a taken port falls back to the next one', async (t) => {
   await createBrowser({ open: cancellingPage(ports), port: taken }).showStore({});
   assert.equal(ports[0], taken + 1);
 });
+
+test('assignProducts answers page messages until the page finishes', async () => {
+  const replies = [];
+  const open = async (url) => {
+    const base = new URL(url).origin;
+    for (const section of [1, 2]) {
+      const response = await fetch(`${base}/api/message`, { method: 'POST', body: JSON.stringify({ section }) });
+      replies.push(await response.json());
+    }
+    await fetch(`${base}/api/result`, { method: 'POST', body: '{}' });
+  };
+  const browser = createBrowser({ open, port: 0 });
+  const result = await browser.assignProducts({}, (message) => ({ got: message.section }));
+  assert.deepEqual(result, {});
+  assert.deepEqual(replies, [{ got: 1 }, { got: 2 }]);
+});

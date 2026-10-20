@@ -113,3 +113,10 @@ Small choices made while building the editor. Each is easy to change.
 | Section ids | Every section has an `id`: a positive integer, unique within its store, assigned automatically (highest id + 1). Existing data was migrated with ids in array order. |
 | Assigning products | Store products point to section ids instead of names, and "Assign products" asks for the id. Renaming a section therefore no longer needs to update products (the rename tracking was removed). |
 | Showing ids | The editor shows each section's id in the top-left corner of its rect (layout page, View store map) and in group titles. **The site must not show ids.** |
+
+## Round 7 (2026-10-21)
+
+| Topic | Decision |
+|-------|----------|
+| Assigning products | "Assign products to store" opens a browser page instead of the terminal flow (which was removed): the current product is shown above the map, and clicking a section assigns it. Buttons: Not in this store, Skip, Back (clears the previous answer), Done. Replaces the "Assign flow" implementation choice above. |
+| Saving | Every click is saved immediately, as before. Pages can now send messages to the terminal while open (`POST /api/message`). |

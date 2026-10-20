@@ -1,6 +1,7 @@
 // Opens editor pages (scripts/web/) in the browser through a short-lived local HTTP server.
 // The page fetches its input from GET /api/params and finishes with POST /api/result;
 // the posted JSON becomes the result of the call and the server shuts down.
+// Pages that save as they go send POST /api/message; onMessage(json) answers it.
 
 import { spawn } from 'node:child_process';
 import { readFile } from 'node:fs/promises';
@@ -29,10 +30,13 @@ export function createBrowser({ open = openInSystemBrowser, port = DEFAULT_PORT 
     drawLayout: (params) => runPage('draw.html', params, open, port),
     // params: buildStoreView() output. Resolves when the page is closed.
     showStore: (params) => runPage('view.html', params, open, port),
+    // params: see scripts/web/assign.js. onMessage(answer) is called for every click and
+    // returns { ok: true } or { error }. Resolves when the page is closed.
+    assignProducts: (params, onMessage) => runPage('assign.html', params, open, port, onMessage),
   };
 }
 
-export function runPage(page, params, open, port = DEFAULT_PORT) {
+export function runPage(page, params, open, port = DEFAULT_PORT, onMessage = null) {
   return new Promise((resolve, reject) => {
     const server = http.createServer(async (req, res) => {
       try {
@@ -44,6 +48,8 @@ export function runPage(page, params, open, port = DEFAULT_PORT) {
           res.on('finish', () => server.close());
           sendJson(res, { ok: true });
           resolve(result);
+        } else if (req.method === 'POST' && pathname === '/api/message' && onMessage !== null) {
+          sendJson(res, await onMessage(JSON.parse(await readBody(req))));
         } else if (req.method === 'GET') {
           await sendStatic(res, pathname);
         } else {

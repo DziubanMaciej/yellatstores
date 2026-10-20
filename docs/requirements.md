@@ -131,7 +131,7 @@ tests run them with scripted answers against a temporary data directory.
 | E3 | **Add product** | Name and aliases. Rejects anything that collides after normalisation. |
 | E4 | **Add aliases** | Pick a product **or recipe** and add aliases. |
 | E5 | **Add recipe** | Name, aliases, ingredients picked from products. |
-| E6 | **Assign products to store** | Pick a store. For each **unassigned** product, type a section **id** (as shown on the map), `0` for "not in store" (`null`), or quit. Saves after every answer. |
+| E6 | **Assign products to store** | Pick a store; a browser page shows the **unassigned** products one at a time (alphabetically) above the store map with section ids. **Click a section** to assign the product, or use **Not in this store** (`null`), **Skip** (stays unassigned), **Back** (previous product, its answer is cleared) or **Done**. Every click is saved immediately. |
 | E7 | **View store** | Browser page: the map with labels and section ids, and beside it the products sorted alphabetically, grouped by section, plus "not in store" and "unassigned" groups. |
 | E8 | **Validate** | Run the integrity checks on `data/` and print the errors. |
 

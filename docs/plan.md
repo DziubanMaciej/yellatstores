@@ -44,7 +44,7 @@ yellatstores/
 │   │   ├── store-view.js     data for the "View store" page
 │   │   ├── menu.js           main menu loop
 │   │   └── commands/         one file per menu command
-│   └── web/ ✅               browser pages: draw.html/js, view.html/js, api.js, style.css,
+│   └── web/ ✅               browser pages: draw.html/js, view.html/js, assign.html/js, api.js, style.css,
 │                             draw-model.js (pure drawing rules, tested in Node)
 └── test/ ✅
     ├── helpers/              sample data, scripted editor session (fake io + fake browser)
@@ -106,8 +106,8 @@ and the CLAUDE.md commands.
   - Click a rect to rename it (decorations: label and box/text-only too).
   - Rects closer than 1 unit turn red, and Done refuses to save while any are red.
   - Mouse wheel zooms around the pointer, middle- or right-button drag pans.
-  - Also: Undo (covers every change), Cancel, Done. Returns the whole layout plus
-    section renames, so that assigned products follow renamed sections.
+  - Also: Undo (covers every change), Cancel, Done. Returns the whole layout.
+    Products point to section ids, so renames need no extra handling.
 - E1 create store and E2 edit store layout both open this page directly.
 
 ## Phase 5: Real data + fill-aliases skill
