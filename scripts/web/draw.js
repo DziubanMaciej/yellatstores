@@ -2,6 +2,7 @@
 // - Drag on empty space draws a rect, then a popup asks for its kind and name.
 // - Drag a rect to move it; select it and drag a corner handle to resize it.
 // - Click a rect (without moving it) to rename it in the same popup.
+// - Ctrl + mouse wheel zooms around the pointer; dragging with the middle button pans.
 // - Rects closer than the minimum gap are shown red; Done refuses to save while any are red.
 // Finishes with { sections, decorations, renames } where renames maps old to new section
 // names, or with null when cancelled.
@@ -18,11 +19,13 @@ import {
   movedRect,
   resizedRect,
   sectionRenames,
+  zoomedArea,
 } from './draw-model.js';
 
 const HELP =
   'Drag on empty space to draw a rect. Drag a rect to move it, or its corner handles to resize it. ' +
-  'Click a rect to rename it.';
+  'Click a rect to rename it. Ctrl + scroll zooms, middle-button drag pans.';
+const ZOOM_STEP = 1.15;
 const CORNERS = ['nw', 'ne', 'sw', 'se'];
 
 const params = await loadParams();
@@ -94,6 +97,18 @@ function toUnits(event) {
 }
 
 canvas.addEventListener('pointerdown', (event) => {
+  if (event.button === 1) {
+    // Middle button: pan. preventDefault stops the browser's own middle-click autoscroll.
+    event.preventDefault();
+    const pixelsPerUnit = canvas.querySelector('svg').getScreenCTM().a;
+    drag = { mode: 'pan', startX: event.clientX, startY: event.clientY, startArea: area, pixelsPerUnit };
+    canvas.setPointerCapture(event.pointerId);
+    canvas.classList.add('panning');
+    return;
+  }
+  if (event.button !== 0) {
+    return;
+  }
   const point = toUnits(event);
   const handle = event.target.closest('[data-corner]');
   const hit = event.target.closest('[data-index]');
@@ -115,6 +130,15 @@ canvas.addEventListener('pointermove', (event) => {
   if (drag === null) {
     return;
   }
+  if (drag.mode === 'pan') {
+    area = {
+      ...drag.startArea,
+      x: drag.startArea.x - (event.clientX - drag.startX) / drag.pixelsPerUnit,
+      y: drag.startArea.y - (event.clientY - drag.startY) / drag.pixelsPerUnit,
+    };
+    render();
+    return;
+  }
   const point = toUnits(event);
   if (drag.mode === 'move') {
     items[drag.index].rect = movedRect(drag.original, point.x - drag.start.x, point.y - drag.start.y);
@@ -132,6 +156,10 @@ canvas.addEventListener('pointerup', () => {
   }
   const finished = drag;
   drag = null;
+  if (finished.mode === 'pan') {
+    canvas.classList.remove('panning');
+    return;
+  }
   if (finished.mode === 'draw') {
     if (finished.rect !== null && finished.rect.w >= 1 && finished.rect.h >= 1) {
       pending = finished.rect;
@@ -239,10 +267,27 @@ $('undo').addEventListener('click', () => {
   reportCollisions();
 });
 
-$('more-space').addEventListener('click', () => {
-  area = { ...area, w: area.w * 1.25, h: area.h * 1.25 };
-  render();
+canvas.addEventListener(
+  'wheel',
+  (event) => {
+    if (!event.ctrlKey) {
+      return; // plain scrolling keeps scrolling the page
+    }
+    event.preventDefault(); // instead of zooming the whole page
+    const factor = event.deltaY > 0 ? ZOOM_STEP : 1 / ZOOM_STEP;
+    area = zoomedArea(area, factor, toUnits(event));
+    render();
+  },
+  { passive: false },
+);
+
+// Firefox would otherwise still open its autoscroll or paste on middle click.
+canvas.addEventListener('mousedown', (event) => {
+  if (event.button === 1) {
+    event.preventDefault();
+  }
 });
+canvas.addEventListener('auxclick', (event) => event.preventDefault());
 
 $('cancel').addEventListener('click', () => finish(null));
 

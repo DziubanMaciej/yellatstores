@@ -88,7 +88,7 @@ Small choices made while building the editor. Each is easy to change.
 
 | Topic | Choice |
 |-------|--------|
-| Coordinates | Dragging rounds to whole units. An empty store's drawing area is 100×60 units. "More space" grows the area by 25%. |
+| Coordinates | Dragging rounds to whole units. An empty store's drawing area starts at 100×60 units (zoom out for more room). |
 | Name characters | Product/recipe names and aliases can't contain `, ; ( )`, because the site parser could never match them (data_layout rule 9). |
 | Assign flow | Besides a section number or `0` (not in store), you can type `s` to skip (stays unassigned, asked again next time), `?` to reprint the sections, or `q` to quit. |
 | Add commands | Add products/aliases/recipes repeat until you enter an empty name, which makes entering many items quick. Ingredients and aliases-to-extend are typed by name or alias, not picked from a long numbered list. |
@@ -104,3 +104,4 @@ Small choices made while building the editor. Each is easy to change.
 | Layout editing | One browser page for create and edit. Drag to draw, then a popup asks for the kind and name (no typing beforehand). Drag to move; corner handles to resize. Replaces the separate "Redraw a section/decoration" options. |
 | Collisions | Rects too close together are marked red, and saving is refused until there are none. The same applies to newly drawn rects (Claude's extension of the rule, for consistency). |
 | Renaming | Click a rect on the layout page to rename it (decorations: label and box/text-only too). The terminal's "Rename a section" and "Change a decoration label" options were removed as redundant, so "Edit store layout" opens the page directly (Claude's call, following the earlier choice to drop redundant options). |
+| Zoom and pan | "More space" button replaced by Ctrl + mouse wheel zoom (around the pointer) and middle-button drag to pan. |

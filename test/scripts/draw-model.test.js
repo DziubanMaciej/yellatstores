@@ -9,6 +9,7 @@ import {
   movedRect,
   resizedRect,
   sectionRenames,
+  zoomedArea,
 } from '../../scripts/web/draw-model.js';
 import { sampleData } from '../helpers/sample-data.js';
 
@@ -85,4 +86,20 @@ test('sectionRenames reports renamed existing sections only', () => {
   items[1].name = 'Warzywa';
   items[3].label = 'Kasy 1-5'; // decorations don't count
   assert.deepEqual(sectionRenames(items), { Warzywa: 'Makarony', Makarony: 'Warzywa' });
+});
+
+test('zoomedArea scales around the given point and keeps it in place', () => {
+  const area = rect(0, 0, 100, 60);
+  const zoomedIn = zoomedArea(area, 0.5, { x: 40, y: 30 });
+  assert.deepEqual(zoomedIn, rect(20, 15, 50, 30));
+  // The point keeps its relative position: 40% across, 50% down.
+  assert.equal((40 - zoomedIn.x) / zoomedIn.w, 0.4);
+  assert.deepEqual(zoomedArea(zoomedIn, 2, { x: 40, y: 30 }), area);
+});
+
+test('zoomedArea stops at the zoom limits', () => {
+  const tiny = rect(0, 0, 6, 4);
+  assert.equal(zoomedArea(tiny, 0.5, { x: 0, y: 0 }), tiny);
+  const huge = rect(0, 0, 4800, 3000);
+  assert.equal(zoomedArea(huge, 1.15, { x: 0, y: 0 }), huge);
 });

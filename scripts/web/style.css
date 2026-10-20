@@ -136,6 +136,11 @@ button.primary {
   cursor: crosshair;
 }
 
+#canvas.panning,
+#canvas.panning * {
+  cursor: grabbing;
+}
+
 /* Layout page: invisible decorations get a dashed outline so they can be seen while editing. */
 #canvas .decoration.invisible rect {
   stroke: var(--decoration-stroke);

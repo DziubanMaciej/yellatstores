@@ -16,6 +16,21 @@ export function drawingArea(layout) {
   return expandRect(bounds, Math.max(5, Math.max(bounds.w, bounds.h) * 0.15));
 }
 
+// Visible area scaled by factor (> 1 zooms out) around center, which stays at the same
+// place on screen. Zoom is limited to a sensible range; beyond it the area doesn't change.
+export function zoomedArea(area, factor, center) {
+  const w = area.w * factor;
+  if (w < 5 || w > 5000) {
+    return area;
+  }
+  return {
+    x: center.x - (center.x - area.x) * factor,
+    y: center.y - (center.y - area.y) * factor,
+    w,
+    h: area.h * factor,
+  };
+}
+
 export function itemsFromLayout(layout) {
   return [
     ...layout.sections.map((section) => ({
