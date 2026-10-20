@@ -16,18 +16,23 @@ const CONTENT_TYPES = {
   '.css': 'text/css; charset=utf-8',
 };
 
+// Pages are served on this port, or the next free one if it's taken (e.g. by a second editor).
+export const DEFAULT_PORT = 8765;
+const PORT_ATTEMPTS = 10;
+
 // open(url) shows the page; tests replace it with code that plays the page's part.
-export function createBrowser({ open = openInSystemBrowser } = {}) {
+// port: 0 picks a random free port (used by tests, so parallel runs don't clash).
+export function createBrowser({ open = openInSystemBrowser, port = DEFAULT_PORT } = {}) {
   return {
     // params: { title, layout: { sections, decorations } } (see scripts/web/draw.js)
     // Resolves to the whole edited layout { sections, decorations }, or null when cancelled.
-    drawLayout: (params) => runPage('draw.html', params, open),
+    drawLayout: (params) => runPage('draw.html', params, open, port),
     // params: buildStoreView() output. Resolves when the page is closed.
-    showStore: (params) => runPage('view.html', params, open),
+    showStore: (params) => runPage('view.html', params, open, port),
   };
 }
 
-export function runPage(page, params, open) {
+export function runPage(page, params, open, port = DEFAULT_PORT) {
   return new Promise((resolve, reject) => {
     const server = http.createServer(async (req, res) => {
       try {
@@ -48,10 +53,19 @@ export function runPage(page, params, open) {
         res.writeHead(500).end(String(e));
       }
     });
-    server.on('error', reject);
-    server.listen(0, '127.0.0.1', () => {
+    let attempt = 0;
+    server.on('error', (e) => {
+      attempt++;
+      if (e.code === 'EADDRINUSE' && port !== 0 && attempt < PORT_ATTEMPTS) {
+        server.listen(port + attempt, '127.0.0.1');
+      } else {
+        reject(e);
+      }
+    });
+    server.on('listening', () => {
       open(`http://127.0.0.1:${server.address().port}/${page}`);
     });
+    server.listen(port, '127.0.0.1');
   });
 }
 
