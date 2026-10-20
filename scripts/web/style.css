@@ -126,13 +126,18 @@ button.primary {
   margin-bottom: 8px;
 }
 
-.assign-bar .progress {
-  color: var(--muted);
+.assign-bar .current {
+  flex: 1;
+  text-align: center;
 }
 
 .assign-bar .current-product {
-  font-size: 1.3rem;
-  margin-right: 8px;
+  font-size: 2rem;
+}
+
+.assign-bar .progress {
+  margin-left: 12px;
+  color: var(--muted);
 }
 
 .assign-map .section {
