@@ -1,0 +1,19 @@
+# Dependencies (none expected, but just in case)
+node_modules/
+
+# Pages build output, if the deploy step is ever run locally
+_site/
+
+# Personal editor / tool state
+.obsidian/
+.vscode/
+.idea/
+.claude/settings.local.json
+
+# Temp and OS files
+*.tmp
+*.tmp.*
+*.swp
+*~
+.DS_Store
+Thumbs.db
