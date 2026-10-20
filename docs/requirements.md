@@ -122,7 +122,7 @@ tests run them with scripted answers against a temporary data directory.
   edits the label and the box/text-only setting. The kind of an existing rect can't change.
 - Rects closer than 1 unit to another rect are shown **red**, and **Done refuses to save** while any
   are red.
-- Ctrl + mouse wheel zooms in and out around the pointer; dragging with the middle mouse button pans.
+- Ctrl + mouse wheel zooms in and out around the pointer; dragging with the middle or right mouse button pans (no context menu over the map).
 - Undo (drawing, moving, resizing, renaming), Cancel, Done.
 | E3 | **Add product** | Name and aliases. Rejects anything that collides after normalisation. |
 | E4 | **Add aliases** | Pick a product **or recipe** and add aliases. |

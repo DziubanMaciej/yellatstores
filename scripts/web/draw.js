@@ -2,7 +2,7 @@
 // - Drag on empty space draws a rect, then a popup asks for its kind and name.
 // - Drag a rect to move it; select it and drag a corner handle to resize it.
 // - Click a rect (without moving it) to rename it in the same popup.
-// - Ctrl + mouse wheel zooms around the pointer; dragging with the middle button pans.
+// - Ctrl + mouse wheel zooms around the pointer; dragging with the middle or right button pans.
 // - Rects closer than the minimum gap are shown red; Done refuses to save while any are red.
 // Finishes with { sections, decorations, renames } where renames maps old to new section
 // names, or with null when cancelled.
@@ -24,7 +24,7 @@ import {
 
 const HELP =
   'Drag on empty space to draw a rect. Drag a rect to move it, or its corner handles to resize it. ' +
-  'Click a rect to rename it. Ctrl + scroll zooms, middle-button drag pans.';
+  'Click a rect to rename it. Ctrl + scroll zooms, middle- or right-button drag pans.';
 const ZOOM_STEP = 1.15;
 const CORNERS = ['nw', 'ne', 'sw', 'se'];
 
@@ -97,8 +97,8 @@ function toUnits(event) {
 }
 
 canvas.addEventListener('pointerdown', (event) => {
-  if (event.button === 1) {
-    // Middle button: pan. preventDefault stops the browser's own middle-click autoscroll.
+  if (event.button === 1 || event.button === 2) {
+    // Middle or right button: pan. preventDefault stops the browser's own middle-click autoscroll.
     event.preventDefault();
     const pixelsPerUnit = canvas.querySelector('svg').getScreenCTM().a;
     drag = { mode: 'pan', startX: event.clientX, startY: event.clientY, startArea: area, pixelsPerUnit };
@@ -288,6 +288,8 @@ canvas.addEventListener('mousedown', (event) => {
   }
 });
 canvas.addEventListener('auxclick', (event) => event.preventDefault());
+// Right button pans, so no context menu over the map.
+canvas.addEventListener('contextmenu', (event) => event.preventDefault());
 
 $('cancel').addEventListener('click', () => finish(null));
 

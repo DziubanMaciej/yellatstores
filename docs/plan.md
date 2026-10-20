@@ -105,7 +105,7 @@ and the CLAUDE.md commands.
   - Drag a rect to move it. Select it and drag a corner handle to resize.
   - Click a rect to rename it (decorations: label and box/text-only too).
   - Rects closer than 1 unit turn red, and Done refuses to save while any are red.
-  - Ctrl + wheel zooms around the pointer, middle-button drag pans.
+  - Ctrl + wheel zooms around the pointer, middle- or right-button drag pans.
   - Also: Undo (covers every change), Cancel, Done. Returns the whole layout plus
     section renames, so that assigned products follow renamed sections.
 - E1 create store and E2 edit store layout both open this page directly.
