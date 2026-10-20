@@ -5,8 +5,8 @@ import { editorSession } from '../../helpers/editor.js';
 
 const drawn = {
   sections: [
-    { name: 'Pieczywo', rect: { x: 0, y: 0, w: 10, h: 5 } },
-    { name: 'Owoce', rect: { x: 12, y: 0, w: 6, h: 5 } },
+    { id: 1, name: 'Pieczywo', rect: { x: 0, y: 0, w: 10, h: 5 } },
+    { id: 2, name: 'Owoce', rect: { x: 12, y: 0, w: 6, h: 5 } },
   ],
   decorations: [{ rect: { x: 0, y: 8, w: 4, h: 2 }, label: 'Wejście', visible: false }],
 };
@@ -30,8 +30,8 @@ test('cancelling the drawing creates nothing', async (t) => {
 test('an invalid drawing is not saved', async (t) => {
   const overlapping = {
     sections: [
-      { name: 'A', rect: { x: 0, y: 0, w: 10, h: 5 } },
-      { name: 'B', rect: { x: 5, y: 0, w: 10, h: 5 } },
+      { id: 1, name: 'A', rect: { x: 0, y: 0, w: 10, h: 5 } },
+      { id: 2, name: 'B', rect: { x: 5, y: 0, w: 10, h: 5 } },
     ],
     decorations: [],
   };

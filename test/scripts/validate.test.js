@@ -124,7 +124,7 @@ test('rule 3: recipe ingredients must be existing products, non-empty and unique
 test('rule 4: section names are unique within a store', () => {
   assertSingleError(
     errorsAfter((d) => {
-      lidl(d).sections.push({ name: 'warzywa', rect: { x: 40, y: 0, w: 1, h: 1 } });
+      lidl(d).sections.push({ id: 4, name: 'warzywa', rect: { x: 40, y: 0, w: 1, h: 1 } });
     }),
     /section name "warzywa" is used more than once/,
   );
@@ -142,10 +142,35 @@ test('rule 5: store products must exist', () => {
 test('rule 6: store products must point to an existing section', () => {
   assertSingleError(
     errorsAfter((d) => {
-      lidl(d).products.mleko = 'Pieczywo';
+      lidl(d).products.mleko = 9;
     }),
-    /product "mleko" is assigned to unknown section "Pieczywo"/,
+    /product "mleko" is assigned to unknown section id 9/,
   );
+  assertSingleError(
+    errorsAfter((d) => {
+      lidl(d).products.mleko = 'Nabiał';
+    }),
+    /product "mleko" is assigned to unknown section id "Nabiał"/,
+  );
+});
+
+test('section ids are positive integers, unique within a store', () => {
+  assertSingleError(
+    errorsAfter((d) => {
+      lidl(d).products = {};
+      lidl(d).sections[1].id = 1;
+    }),
+    /section id 1 is used more than once/,
+  );
+  for (const id of [0, -1, 1.5, '2']) {
+    assertSingleError(
+      errorsAfter((d) => {
+        lidl(d).products = {};
+        lidl(d).sections[1].id = id;
+      }),
+      /id must be a positive integer/,
+    );
+  }
 });
 
 test('rule 7: rects need a positive size', () => {

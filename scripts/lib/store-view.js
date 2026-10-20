@@ -5,7 +5,7 @@ import { compareNames } from '../../site/lib/normalize.js';
 
 export function buildStoreView(data, storeName) {
   const store = data.stores[storeName];
-  const sectionGroups = new Map(store.sections.map((section) => [section.name, []]));
+  const sectionGroups = new Map(store.sections.map((section) => [section.id, []]));
   const notCarried = [];
   const unassigned = [];
   for (const product of Object.keys(data.products).sort(compareNames)) {
@@ -18,12 +18,15 @@ export function buildStoreView(data, storeName) {
     }
   }
 
-  const groups = [...sectionGroups].map(([title, items]) => ({ title, items }));
+  const groups = store.sections.map((section) => ({
+    title: `${section.id}) ${section.name}`,
+    items: sectionGroups.get(section.id),
+  }));
   if (notCarried.length > 0) {
     groups.push({ title: 'Not in this store', items: notCarried });
   }
   if (unassigned.length > 0) {
     groups.push({ title: 'Unassigned', items: unassigned });
   }
-  return { title: storeName, svg: renderLayoutSvg(store), groups };
+  return { title: storeName, svg: renderLayoutSvg(store, { showIds: true }), groups };
 }

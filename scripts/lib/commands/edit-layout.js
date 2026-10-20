@@ -1,7 +1,7 @@
 import { pickStore } from '../input.js';
 
 // E2: edit a store's layout in the browser: add, move, resize and rename rects.
-// Nothing can be removed. Products assigned to a renamed section follow the new name.
+// Nothing can be removed. Products are assigned by section id, so renames don't affect them.
 export async function editLayout(ctx) {
   const storeName = await pickStore(ctx);
   if (storeName === null) {
@@ -18,20 +18,10 @@ export async function editLayout(ctx) {
   }
   if (
     ctx.change((data) => {
-      const changed = data.stores[storeName];
-      changed.sections = edited.sections;
-      changed.decorations = edited.decorations;
-      // All renames apply at once, so swapping two names works too.
-      for (const [product, section] of Object.entries(changed.products)) {
-        if (section !== null && Object.hasOwn(edited.renames, section)) {
-          changed.products[product] = edited.renames[section];
-        }
-      }
+      data.stores[storeName].sections = edited.sections;
+      data.stores[storeName].decorations = edited.decorations;
     })
   ) {
-    for (const [from, to] of Object.entries(edited.renames)) {
-      ctx.io.print(`Renamed section "${from}" to "${to}".`);
-    }
     ctx.io.print('Layout saved.');
   }
 }

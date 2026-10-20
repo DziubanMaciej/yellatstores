@@ -1,7 +1,6 @@
 // Pure rules of the drawing page, kept apart from the DOM so they can be tested in Node.
 // The page works on a flat list of items:
-//   { kind: 'section', name, originalName?, rect } | { kind: 'decoration', label?, visible?, rect }
-// originalName is the name a section had when the page opened, to detect renames.
+//   { kind: 'section', id, name, rect } | { kind: 'decoration', label?, visible?, rect }
 
 import { boundsOf, expandRect, rectFromPoints, tooClose } from '../../site/lib/geometry.js';
 import { EMPTY_VIEW_BOX, layoutRects } from '../../site/lib/map.js';
@@ -33,12 +32,7 @@ export function zoomedArea(area, factor, center) {
 
 export function itemsFromLayout(layout) {
   return [
-    ...layout.sections.map((section) => ({
-      kind: 'section',
-      name: section.name,
-      originalName: section.name,
-      rect: section.rect,
-    })),
+    ...layout.sections.map((section) => ({ kind: 'section', ...section })),
     ...layout.decorations.map((decoration) => ({ kind: 'decoration', ...decoration })),
   ];
 }
@@ -47,20 +41,14 @@ export function itemsFromLayout(layout) {
 // so existing items stay where they were and new ones end up last.
 export function layoutFromItems(items) {
   return {
-    sections: items.filter((i) => i.kind === 'section').map((i) => ({ name: i.name, rect: i.rect })),
+    sections: items.filter((i) => i.kind === 'section').map((i) => ({ id: i.id, name: i.name, rect: i.rect })),
     decorations: items.filter((i) => i.kind === 'decoration').map(toDecoration),
   };
 }
 
-// { oldName: newName } for every existing section renamed on the page.
-export function sectionRenames(items) {
-  const renames = {};
-  for (const item of items) {
-    if (item.kind === 'section' && item.originalName !== undefined && item.originalName !== item.name) {
-      renames[item.originalName] = item.name;
-    }
-  }
-  return renames;
+// Id for a new section: one more than the highest id in the store.
+export function nextSectionId(items) {
+  return Math.max(0, ...items.filter((i) => i.kind === 'section').map((i) => i.id)) + 1;
 }
 
 function toDecoration(item) {

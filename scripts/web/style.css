@@ -78,6 +78,11 @@ button.primary {
   pointer-events: none;
 }
 
+.store-map .section-id {
+  fill: var(--section-stroke);
+  font-weight: 600;
+}
+
 .store-map .decoration text {
   fill: var(--muted);
 }

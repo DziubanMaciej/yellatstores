@@ -1,6 +1,7 @@
 // Store map as an SVG string. Shared by the site and the editor's browser pages.
 // Styling is left to CSS via the classes below:
-//   .store-map, .section, .decoration, .invisible (decoration with visible: false)
+//   .store-map, .section, .decoration, .invisible (decoration with visible: false), .section-id
+// Sections carry data-section="<id>".
 
 import { boundsOf, expandRect } from './geometry.js';
 
@@ -21,7 +22,9 @@ export function fitViewBox(layout) {
 }
 
 // layout: { sections, decorations } as in stores.json.
-export function renderLayoutSvg(layout, { viewBox = fitViewBox(layout) } = {}) {
+// showIds: write each section's id in its top-left corner. Editor only: the site must not
+// show ids, they mean nothing to a shopper.
+export function renderLayoutSvg(layout, { viewBox = fitViewBox(layout), showIds = false } = {}) {
   // Label size is relative to the store, not to the visible area, so labels scale with the
   // map when zooming instead of staying the same size on screen.
   const storeSize = fitViewBox(layout);
@@ -33,9 +36,10 @@ export function renderLayoutSvg(layout, { viewBox = fitViewBox(layout) } = {}) {
     parts.push(`<g class="${classes}">${renderRect(decoration.rect)}${label}</g>`);
   }
   for (const section of layout.sections) {
+    const id = showIds ? renderId(section.id, section.rect, baseFontSize) : '';
     parts.push(
-      `<g class="section" data-section="${escapeXml(section.name)}">` +
-        `${renderRect(section.rect)}${renderLabel(section.name, section.rect, baseFontSize)}</g>`,
+      `<g class="section" data-section="${section.id}">` +
+        `${renderRect(section.rect)}${renderLabel(section.name, section.rect, baseFontSize)}${id}</g>`,
     );
   }
   const vb = [viewBox.x, viewBox.y, viewBox.w, viewBox.h].map(formatNumber).join(' ');
@@ -68,6 +72,16 @@ function renderLabel(text, rect, baseFontSize) {
   return (
     `<text x="${cx}" y="${cy}" font-size="${formatNumber(fontSize)}" text-anchor="middle" ` +
     `dominant-baseline="central"${rotate}>${escapeXml(text)}</text>`
+  );
+}
+
+// Small id number in the top-left corner, scaled down for small rects.
+function renderId(id, rect, baseFontSize) {
+  const fontSize = Math.min(baseFontSize * 0.8, rect.w * 0.4, rect.h * 0.4);
+  const pad = fontSize * 0.3;
+  return (
+    `<text class="section-id" x="${formatNumber(rect.x + pad)}" y="${formatNumber(rect.y + pad)}" ` +
+    `font-size="${formatNumber(fontSize)}" dominant-baseline="hanging">${id}</text>`
   );
 }
 

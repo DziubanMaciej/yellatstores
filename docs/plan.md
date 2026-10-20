@@ -125,6 +125,7 @@ and the CLAUDE.md commands.
    - **Input view:** store select (no default), textarea, Dalej → sets the hash.
    - **Result view:** grouped list, SVG map, Kopiuj link.
    - Map: highlighted sections with a count badge, the rest dimmed.
+   - **No section ids on the site**: they are editor-only (don't pass `showIds` to `renderLayoutSvg`).
    - Click/tap toggles the linked highlight between map and list; hover outline on PC.
    - Mobile-first: list on top, map below. Polish UI strings.
 4. Fetch data with `{cache: 'no-cache'}`.

@@ -6,7 +6,7 @@ import { assignProducts } from '../../../scripts/lib/commands/assign-products.js
 import { editorSession } from '../../helpers/editor.js';
 import { sampleData } from '../../helpers/sample-data.js';
 
-// Sample store sections: 1) Warzywa 2) Makarony 3) Nabiał. Unassigned there: mleko only.
+// Sample store section ids: 1 Warzywa, 2 Makarony, 3 Nabiał. Unassigned there: mleko only.
 function dataWithMoreProducts() {
   const data = sampleData();
   data.products.chleb = { aliases: [] };
@@ -17,18 +17,18 @@ function dataWithMoreProducts() {
 test('asks only for unassigned products, alphabetically, and saves each answer', async (t) => {
   const session = editorSession(t, {
     data: dataWithMoreProducts(),
-    // store 1; chleb → not in store; jajka → invalid, then Nabiał; mleko → Nabiał
+    // store 1; chleb → not in store; jajka → unknown id, then Nabiał; mleko → Nabiał
     answers: ['1', '0', '9', '3', '3'],
   });
   await assignProducts(session.ctx);
   const data = session.finish(assert);
   assert.deepEqual(data.stores['Lidl Główna'].products, {
     chleb: null,
-    jajka: 'Nabiał',
-    makaron: 'Makarony',
-    mleko: 'Nabiał',
+    jajka: 3,
+    makaron: 2,
+    mleko: 3,
     passata: null,
-    pomidory: 'Warzywa',
+    pomidory: 1,
   });
   const asked = session.output.filter((line) => /^\[\d\/3\]/.test(line));
   assert.deepEqual(
@@ -43,17 +43,31 @@ test('skip leaves a product unassigned, quit stops with earlier answers saved', 
   const data = session.finish(assert);
   const products = data.stores['Lidl Główna'].products;
   assert.equal(Object.hasOwn(products, 'chleb'), false);
-  assert.equal(products.jajka, 'Warzywa');
+  assert.equal(products.jajka, 1);
   assert.equal(Object.hasOwn(products, 'mleko'), false);
   const onDisk = JSON.parse(readFileSync(join(session.dir, 'stores.json'), 'utf8'));
-  assert.equal(onDisk['Lidl Główna'].products.jajka, 'Warzywa');
+  assert.equal(onDisk['Lidl Główna'].products.jajka, 1);
 });
 
 test('says so when everything is assigned', async (t) => {
   const data = sampleData();
-  data.stores['Lidl Główna'].products.mleko = 'Nabiał';
+  data.stores['Lidl Główna'].products.mleko = 3;
   const session = editorSession(t, { data, answers: ['1'] });
   await assignProducts(session.ctx);
   session.finish(assert);
   assert.ok(session.output.includes('All products are already assigned in "Lidl Główna".'));
+});
+
+test('sections are listed and chosen by id, not by position', async (t) => {
+  const data = sampleData();
+  const sections = data.stores['Lidl Główna'].sections;
+  sections[0].id = 7; // Warzywa
+  data.stores['Lidl Główna'].products.pomidory = 7;
+  // store 1; mleko → 1 is no longer an id, then 7
+  const session = editorSession(t, { data, answers: ['1', '1', '7'] });
+  await assignProducts(session.ctx);
+  const store = session.finish(assert).stores['Lidl Główna'];
+  assert.equal(store.products.mleko, 7);
+  assert.ok(session.output.includes('  7) Warzywa'));
+  assert.ok(session.output.includes('Invalid choice.'));
 });

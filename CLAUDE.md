@@ -16,6 +16,7 @@ editor (`scripts/`) edits that data.
   the site UI and the data content.
 - The site is plain HTML + vanilla JS ES modules + CSS. Logic lives in pure modules in
   `site/lib/` (no DOM), which are shared with the editor and tested in Node.
+- Section ids are editor-only. The site must never show them (no `showIds` in `renderLayoutSvg`).
 - The editor must be testable: commands talk to the user only through `ctx.io` / `ctx.browser`,
   and change data only through `ctx.change()` (apply to a copy → validate → save). Tests drive
   commands with `test/helpers/editor.js`. New data rules belong in `scripts/lib/validate.js`,

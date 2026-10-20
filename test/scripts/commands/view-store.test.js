@@ -8,14 +8,15 @@ import { sampleData } from '../../helpers/sample-data.js';
 test('store view groups products alphabetically by section, then not carried and unassigned', () => {
   const data = sampleData();
   data.products.cebula = { aliases: [] };
-  data.stores['Lidl Główna'].products.cebula = 'Warzywa';
+  data.stores['Lidl Główna'].products.cebula = 1;
   const view = buildStoreView(data, 'Lidl Główna');
   assert.equal(view.title, 'Lidl Główna');
   assert.match(view.svg, /^<svg /);
+  assert.match(view.svg, /class="section-id"/);
   assert.deepEqual(view.groups, [
-    { title: 'Warzywa', items: ['cebula', 'pomidory'] },
-    { title: 'Makarony', items: ['makaron'] },
-    { title: 'Nabiał', items: [] },
+    { title: '1) Warzywa', items: ['cebula', 'pomidory'] },
+    { title: '2) Makarony', items: ['makaron'] },
+    { title: '3) Nabiał', items: [] },
     { title: 'Not in this store', items: ['passata'] },
     { title: 'Unassigned', items: ['mleko'] },
   ]);

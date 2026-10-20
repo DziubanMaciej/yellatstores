@@ -24,7 +24,11 @@ function canonicalRecipes(recipes) {
 
 function canonicalStores(stores) {
   return mapSorted(stores, (store) => ({
-    sections: store.sections.map((section) => ({ name: section.name, rect: canonicalRect(section.rect) })),
+    sections: store.sections.map((section) => ({
+      id: section.id,
+      name: section.name,
+      rect: canonicalRect(section.rect),
+    })),
     decorations: store.decorations.map((decoration) => {
       const result = { rect: canonicalRect(decoration.rect) };
       if (decoration.label !== undefined) {

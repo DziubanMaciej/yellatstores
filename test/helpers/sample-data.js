@@ -19,15 +19,15 @@ export function sampleData() {
     stores: {
       'Lidl Główna': {
         sections: [
-          { name: 'Warzywa', rect: { x: 0, y: 0, w: 10, h: 8 } },
-          { name: 'Makarony', rect: { x: 12, y: 0, w: 4, h: 8 } },
-          { name: 'Nabiał', rect: { x: 0, y: 10, w: 16, h: 3 } },
+          { id: 1, name: 'Warzywa', rect: { x: 0, y: 0, w: 10, h: 8 } },
+          { id: 2, name: 'Makarony', rect: { x: 12, y: 0, w: 4, h: 8 } },
+          { id: 3, name: 'Nabiał', rect: { x: 0, y: 10, w: 16, h: 3 } },
         ],
         decorations: [
           { rect: { x: 20, y: 0, w: 5, h: 3 }, label: 'Kasy' },
           { rect: { x: 20, y: 10, w: 5, h: 2 }, label: 'Wejście', visible: false },
         ],
-        products: { makaron: 'Makarony', passata: null, pomidory: 'Warzywa' },
+        products: { makaron: 2, passata: null, pomidory: 1 },
       },
     },
   };

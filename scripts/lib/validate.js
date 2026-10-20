@@ -133,7 +133,7 @@ function validateStores(stores, products, errors) {
       continue;
     }
     const placed = []; // { rect, description } of every valid rect, for the gap check
-    const sectionNames = new Set();
+    const sectionIds = new Set();
     const normalizedSectionNames = new Set();
 
     if (!Array.isArray(store.sections)) {
@@ -141,14 +141,20 @@ function validateStores(stores, products, errors) {
     } else {
       store.sections.forEach((section, index) => {
         const sectionWhere = `${where}: section #${index + 1}`;
-        if (!checkFields(section, ['name', 'rect'], [], sectionWhere, errors)) {
+        if (!checkFields(section, ['id', 'name', 'rect'], [], sectionWhere, errors)) {
           return;
+        }
+        if (!Number.isInteger(section.id) || section.id < 1) {
+          errors.push(`${sectionWhere}: id must be a positive integer`);
+        } else if (sectionIds.has(section.id)) {
+          errors.push(`${where}: section id ${section.id} is used more than once`);
+        } else {
+          sectionIds.add(section.id);
         }
         if (checkLabel(section.name, sectionWhere, errors)) {
           if (normalizedSectionNames.has(normalize(section.name))) {
             errors.push(`${where}: section name "${section.name}" is used more than once`);
           }
-          sectionNames.add(section.name);
           normalizedSectionNames.add(normalize(section.name));
         }
         if (checkRect(section.rect, `${sectionWhere}: rect`, errors)) {
@@ -196,12 +202,12 @@ function validateStores(stores, products, errors) {
       errors.push(`${where}: products must be an object`);
       continue;
     }
-    for (const [productName, sectionName] of Object.entries(store.products)) {
+    for (const [productName, sectionId] of Object.entries(store.products)) {
       if (!Object.hasOwn(products, productName)) {
         errors.push(`${where}: product "${productName}" is not in products.json`);
       }
-      if (sectionName !== null && !sectionNames.has(sectionName)) {
-        errors.push(`${where}: product "${productName}" is assigned to unknown section ${JSON.stringify(sectionName)}`);
+      if (sectionId !== null && !sectionIds.has(sectionId)) {
+        errors.push(`${where}: product "${productName}" is assigned to unknown section id ${JSON.stringify(sectionId)}`);
       }
     }
   }

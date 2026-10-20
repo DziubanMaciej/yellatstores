@@ -4,8 +4,8 @@
 // - Click a rect (without moving it) to rename it in the same popup.
 // - The mouse wheel zooms around the pointer; dragging with the middle or right button pans.
 // - Rects closer than the minimum gap are shown red; Done refuses to save while any are red.
-// Finishes with { sections, decorations, renames } where renames maps old to new section
-// names, or with null when cancelled.
+// - Each section shows its id in the top-left corner; new sections get the next free id.
+// Finishes with the whole layout { sections, decorations }, or with null when cancelled.
 
 import { rectFromPoints } from '../../site/lib/geometry.js';
 import { escapeXml, renderLayoutSvg } from '../../site/lib/map.js';
@@ -17,8 +17,8 @@ import {
   itemsFromLayout,
   layoutFromItems,
   movedRect,
+  nextSectionId,
   resizedRect,
-  sectionRenames,
   zoomedArea,
 } from './draw-model.js';
 
@@ -69,7 +69,7 @@ function render() {
   if (preview) {
     overlay.push(rectMarkup(preview, 'class="preview"'));
   }
-  const svg = renderLayoutSvg(layoutFromItems(items), { viewBox: area });
+  const svg = renderLayoutSvg(layoutFromItems(items), { viewBox: area, showIds: true });
   canvas.innerHTML = svg.replace('</svg>', `${overlay.join('')}</svg>`);
 }
 
@@ -232,7 +232,7 @@ $('item-form').addEventListener('submit', (event) => {
   const base = editing === null ? { rect: pending } : items[editing];
   const item =
     selectedKind() === 'section'
-      ? { ...base, kind: 'section', name: text }
+      ? { id: base.id ?? nextSectionId(items), ...base, kind: 'section', name: text }
       : { ...base, kind: 'decoration', label: text || undefined, visible: $('visible').checked };
   const error = checkItem(item, items, editing ?? -1);
   if (error !== null) {
@@ -295,7 +295,7 @@ $('done').addEventListener('click', () => {
     setStatus('Some rects are too close to each other (red). Move them apart first.', true);
     return;
   }
-  finish({ ...layoutFromItems(items), renames: sectionRenames(items) });
+  finish(layoutFromItems(items));
 });
 
 render();

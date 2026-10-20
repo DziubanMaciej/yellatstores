@@ -91,6 +91,8 @@ on a PC too. No localStorage or any other stored state: the URL is the only stat
 ### 2.3 Result view
 - **List**: one group per section: a header with the section name, then items as
   `name (note, note, …)`.
+- **Do not show section ids** anywhere on the site (list or map). They are an editor-only aid;
+  render the map without the `showIds` option.
 - **Map**: SVG built from sections and decorations, labelled.
   - Sections with list items are highlighted and show a **count badge** (a small circle with the
     number of items). Item names are **not** drawn on the map.
@@ -112,9 +114,11 @@ tests run them with scripted answers against a temporary data directory.
 | # | Command | Description |
 |---|---------|-------------|
 | E1 | **Create store** | Enter a name, then the layout page opens (see below). |
-| E2 | **Edit store layout** | Pick a store; the layout page opens. Products assigned to a renamed section follow the new name. No removing. |
+| E2 | **Edit store layout** | Pick a store; the layout page opens. Products are assigned by section id, so renaming a section keeps its products. No removing. |
 
 **Layout page** (used by E1 and E2):
+- Each section shows its **id** in its top-left corner. A new section gets the next free id
+  (highest id + 1).
 - Drag on empty space to draw a rect. A popup then asks: section or decoration, its name or label,
   and for decorations whether to draw the box or show text only.
 - Drag a rect to move it. Select it and drag a corner handle to resize it. Coordinates are whole units.
@@ -127,8 +131,8 @@ tests run them with scripted answers against a temporary data directory.
 | E3 | **Add product** | Name and aliases. Rejects anything that collides after normalisation. |
 | E4 | **Add aliases** | Pick a product **or recipe** and add aliases. |
 | E5 | **Add recipe** | Name, aliases, ingredients picked from products. |
-| E6 | **Assign products to store** | Pick a store. For each **unassigned** product, choose a section, "not in store" (`null`), or quit. Saves after every answer. |
-| E7 | **View store** | Browser page: the map with labels, and beside it the products sorted alphabetically, grouped by section, plus "not in store" and "unassigned" groups. |
+| E6 | **Assign products to store** | Pick a store. For each **unassigned** product, type a section **id** (as shown on the map), `0` for "not in store" (`null`), or quit. Saves after every answer. |
+| E7 | **View store** | Browser page: the map with labels and section ids, and beside it the products sorted alphabetically, grouped by section, plus "not in store" and "unassigned" groups. |
 | E8 | **Validate** | Run the integrity checks on `data/` and print the errors. |
 
 Every save validates first and refuses to write invalid data. Nothing can be deleted from the

@@ -53,17 +53,17 @@ Key = store name (shown in the site's dropdown).
 {
   "Lidl Główna": {
     "sections": [
-      { "name": "Warzywa",  "rect": { "x": 0,  "y": 0, "w": 10, "h": 8 } },
-      { "name": "Makarony", "rect": { "x": 12, "y": 0, "w": 4,  "h": 8 } }
+      { "id": 1, "name": "Warzywa",  "rect": { "x": 0,  "y": 0, "w": 10, "h": 8 } },
+      { "id": 2, "name": "Makarony", "rect": { "x": 12, "y": 0, "w": 4,  "h": 8 } }
     ],
     "decorations": [
       { "rect": { "x": 30, "y": 20, "w": 8, "h": 3 }, "label": "Kasy" },
       { "rect": { "x": 0,  "y": 23, "w": 6, "h": 2 }, "label": "Wejście", "visible": false }
     ],
     "products": {
-      "makaron": "Makarony",
+      "makaron": 2,
       "passata": null,
-      "pomidory": "Warzywa"
+      "pomidory": 1
     }
   }
 }
@@ -72,6 +72,10 @@ Key = store name (shown in the site's dropdown).
 ### Sections
 - An **array**. Its order is the order of section groups in the site's list. The editor appends
   new sections at the end. To reorder, edit the JSON by hand.
+- `id` is a positive integer, unique within the store. The editor assigns it automatically: one
+  more than the highest id in the store. Products refer to sections by id, so renaming a section
+  doesn't touch them. Ids are shown only in the editor (layout page, View store, Assign products),
+  **never on the site**.
 - `name` is unique within the store. `rect` is `{x, y, w, h}` in abstract units: top-left origin,
   y grows downwards, `w > 0`, `h > 0`.
 
@@ -84,11 +88,11 @@ Map elements that aren't sections and hold no products: checkouts, entrance, lab
 - Never overlap anything (see rule 7).
 
 ### Products (per store)
-`{ productName: sectionName | null }`.
+`{ productName: sectionId | null }`.
 
 | Entry | Meaning | On the site |
 |-------|---------|-------------|
-| `"pomidory": "Warzywa"` | In that section | In the "Warzywa" group |
+| `"pomidory": 1` | In the section with id 1 | In that section's group (e.g. "Warzywa") |
 | `"passata": null` | Checked, the store doesn't carry it | Unknown: *nie ma w tym sklepie* |
 | key missing | Never assigned | Unknown: *nieprzypisany w tym sklepie* |
 | *(input matches nothing)* | | Unknown: *nieznany produkt* |
@@ -107,9 +111,9 @@ editor, and on the output of the editor tests.
 2. After normalisation, product names, product aliases, recipe names and recipe aliases are all
    unique together (no alias can mean two things).
 3. Every recipe has at least one ingredient. Every ingredient is an existing product, and no ingredient is listed twice.
-4. Section names are unique within a store.
+4. Section ids are positive integers, and section ids and names are each unique within a store.
 5. Every key of a store's `products` is an existing product.
-6. Every non-null value of a store's `products` is a section name in that store.
+6. Every non-null value of a store's `products` is a section id in that store.
 7. Every rect has `w > 0` and `h > 0`. **No two rects in a store overlap or touch**, whether sections,
    decorations, or invisible decorations. Any two rects must be at least **1 unit** apart,
    horizontally or vertically.

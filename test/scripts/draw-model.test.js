@@ -8,7 +8,7 @@ import {
   layoutFromItems,
   movedRect,
   resizedRect,
-  sectionRenames,
+  nextSectionId,
   zoomedArea,
 } from '../../scripts/web/draw-model.js';
 import { sampleData } from '../helpers/sample-data.js';
@@ -33,9 +33,9 @@ test('items convert back to the same layout, new items appended per kind', () =>
   const items = itemsFromLayout(layout());
   assert.deepEqual(layoutFromItems(items), layout());
   items.push({ kind: 'decoration', label: undefined, visible: true, rect: rect(40, 0, 1, 1) });
-  items.push({ kind: 'section', name: 'Pieczywo', rect: rect(40, 5, 1, 1) });
+  items.push({ kind: 'section', id: 4, name: 'Pieczywo', rect: rect(40, 5, 1, 1) });
   const result = layoutFromItems(items);
-  assert.deepEqual(result.sections.at(-1), { name: 'Pieczywo', rect: rect(40, 5, 1, 1) });
+  assert.deepEqual(result.sections.at(-1), { id: 4, name: 'Pieczywo', rect: rect(40, 5, 1, 1) });
   assert.deepEqual(result.decorations.at(-1), { rect: rect(40, 0, 1, 1) });
   assert.deepEqual(result.decorations[1], { rect: rect(20, 10, 5, 2), label: 'Wejście', visible: false });
 });
@@ -78,14 +78,12 @@ test('an edited item may keep its own name but not take another section name', (
   assert.match(checkItem({ ...items[0], name: 'makarony' }, items, 0), /already is a section/);
 });
 
-test('sectionRenames reports renamed existing sections only', () => {
+test('nextSectionId is one more than the highest id, ignoring gaps', () => {
+  assert.equal(nextSectionId([]), 1);
   const items = itemsFromLayout(layout());
-  items.push({ kind: 'section', name: 'Pieczywo', rect: rect(40, 0, 1, 1) });
-  assert.deepEqual(sectionRenames(items), {});
-  items[0].name = 'Makarony';
-  items[1].name = 'Warzywa';
-  items[3].label = 'Kasy 1-5'; // decorations don't count
-  assert.deepEqual(sectionRenames(items), { Warzywa: 'Makarony', Makarony: 'Warzywa' });
+  assert.equal(nextSectionId(items), 4);
+  items[1].id = 10;
+  assert.equal(nextSectionId(items), 11);
 });
 
 test('zoomedArea scales around the given point and keeps it in place', () => {
