@@ -2,7 +2,7 @@
 // - Drag on empty space draws a rect, then a popup asks for its kind and name.
 // - Drag a rect to move it; select it and drag a corner handle to resize it.
 // - Click a rect (without moving it) to rename it in the same popup.
-// - Ctrl + mouse wheel zooms around the pointer; dragging with the middle or right button pans.
+// - The mouse wheel zooms around the pointer; dragging with the middle or right button pans.
 // - Rects closer than the minimum gap are shown red; Done refuses to save while any are red.
 // Finishes with { sections, decorations, renames } where renames maps old to new section
 // names, or with null when cancelled.
@@ -24,7 +24,7 @@ import {
 
 const HELP =
   'Drag on empty space to draw a rect. Drag a rect to move it, or its corner handles to resize it. ' +
-  'Click a rect to rename it. Ctrl + scroll zooms, middle- or right-button drag pans.';
+  'Click a rect to rename it. Scroll to zoom, drag with the middle or right button to pan.';
 const ZOOM_STEP = 1.15;
 const CORNERS = ['nw', 'ne', 'sw', 'se'];
 
@@ -270,10 +270,7 @@ $('undo').addEventListener('click', () => {
 canvas.addEventListener(
   'wheel',
   (event) => {
-    if (!event.ctrlKey) {
-      return; // plain scrolling keeps scrolling the page
-    }
-    event.preventDefault(); // instead of zooming the whole page
+    event.preventDefault(); // instead of scrolling (or, with Ctrl, zooming) the whole page
     const factor = event.deltaY > 0 ? ZOOM_STEP : 1 / ZOOM_STEP;
     area = zoomedArea(area, factor, toUnits(event));
     render();
