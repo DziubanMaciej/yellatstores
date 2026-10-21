@@ -128,3 +128,9 @@ Small choices made while building the editor. Each is easy to change.
 | List splitting | The list is split on **newlines only**. Commas and semicolons are ordinary characters (so `mleko (2l, bez laktozy)` is one entry with one note). Supersedes the Round 1 rule. |
 | PC layout | Screens 800px and wider: list on the left, map on the right, the map staying in view while the list scrolls. Phones: list on top, map below. |
 | Deploy branch | The workflow deploys on pushes to `master`, the repo's actual default branch (the docs used to say `main`). |
+
+## Round 8 (2026-10-21)
+
+| Topic | Decision |
+|-------|----------|
+| Site server on the LAN | `node scripts/serve.js --lan` listens on all interfaces (and prints the LAN URLs) so the site can be tried from a phone. Without the flag it stays on `127.0.0.1`. |

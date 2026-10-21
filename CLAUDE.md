@@ -34,7 +34,7 @@ editor (`scripts/`) edits that data.
 |---------|--------------|
 | `npm test` | Run all tests: `node --test` on `test/**/*.test.js` |
 | `node scripts/edit.js` | Interactive data editor (terminal menu; drawing/viewing opens the browser) |
-| `node scripts/serve.js` | Serve the site locally at http://localhost:8000/, mirroring the deployed layout |
+| `node scripts/serve.js [--lan] [port]` | Serve the site locally at http://localhost:8000/, mirroring the deployed layout. `--lan` also allows other devices on the network |
 
 Run `npm test` after every change. Only files named `*.test.js` under `test/` are run as tests;
 helpers and fixtures in `test/` use other names. No git hooks: the user runs tests by hand, and
