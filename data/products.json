@@ -177,10 +177,10 @@
     "aliases": ["sałata", "listki"]
   },
   "mozzarella": {
-    "aliases": [ "mozarella", "mozzarela", "mozarela"]
+    "aliases": ["mozarella", "mozzarela", "mozarela"]
   },
   "mozzarella tarta": {
-    "aliases": [ "mozarella tarta", "mozzarela tarta", "mozarela tarta"]
+    "aliases": ["mozarella tarta", "mozzarela tarta", "mozarela tarta"]
   },
   "musztarda": {
     "aliases": []
