@@ -1,4 +1,164 @@
 {
+  "biedronka_hynka": {
+    "sections": [
+      {
+        "id": 1,
+        "name": "Kasy",
+        "rect": { "x": 23, "y": 31, "w": 32, "h": 5 }
+      },
+      {
+        "id": 2,
+        "name": "Alkohole mocne",
+        "rect": { "x": 16, "y": 20, "w": 6, "h": 16 }
+      },
+      {
+        "id": 3,
+        "name": "Piwo, soki",
+        "rect": { "x": 16, "y": 3, "w": 10, "h": 16 }
+      },
+      {
+        "id": 4,
+        "name": "Lodówki",
+        "rect": { "x": 67, "y": -7, "w": 7, "h": 43 }
+      },
+      {
+        "id": 5,
+        "name": "Warzywa, owoce",
+        "rect": { "x": 56, "y": 14, "w": 10, "h": 16 }
+      },
+      {
+        "id": 6,
+        "name": "Słodycze",
+        "rect": { "x": 51, "y": 3, "w": 4, "h": 27 }
+      },
+      {
+        "id": 7,
+        "name": "Pieczywo",
+        "rect": { "x": 38, "y": -15, "w": 36, "h": 7 }
+      },
+      {
+        "id": 8,
+        "name": "Mięso, mrożonki",
+        "rect": { "x": 56, "y": -7, "w": 10, "h": 20 }
+      },
+      {
+        "id": 9,
+        "name": "Woda",
+        "rect": { "x": 16, "y": -15, "w": 10, "h": 17 }
+      },
+      {
+        "id": 10,
+        "name": "Rossman",
+        "rect": { "x": 27, "y": 3, "w": 11, "h": 27 }
+      },
+      {
+        "id": 11,
+        "name": "Sosy, puszki, jajka",
+        "rect": { "x": 39, "y": 3, "w": 11, "h": 27 }
+      }
+    ],
+    "decorations": [
+      {
+        "rect": { "x": 16, "y": 37, "w": 47, "h": 7 },
+        "label": "Korytarz"
+      },
+      {
+        "rect": { "x": 64, "y": 37, "w": 10, "h": 7 },
+        "label": "Wejście",
+        "visible": false
+      }
+    ],
+    "products": {
+      "awokado": 5,
+      "banan": 5,
+      "bao": null,
+      "barszcz": null,
+      "batony": 6,
+      "biała fasola": 11,
+      "borówki": 5,
+      "bób": 5,
+      "bułki": 7,
+      "buraki": 5,
+      "cebula": 5,
+      "cebula czerwona": 5,
+      "chleb": 7,
+      "cytryny": 5,
+      "czekolada": 6,
+      "czerwona fasola": 5,
+      "czerwona kapusta": 5,
+      "czosnek": 5,
+      "dezodorant": 10,
+      "elektrolity": 1,
+      "frankfurterki": 4,
+      "groszek": 11,
+      "halloumi": 4,
+      "imbir": 5,
+      "jabłka": 5,
+      "jager": 2,
+      "jajka": 11,
+      "jogurty": 4,
+      "kiełbasa": 4,
+      "kiwi": 5,
+      "koperek": 5,
+      "kukurydza": 11,
+      "kurczak": 8,
+      "kurki": 5,
+      "limonka": 5,
+      "łosoś": 8,
+      "łosoś wędzony": 4,
+      "majonez": 11,
+      "marchewka": 5,
+      "mięso mielone": 8,
+      "mięso rosołowe": 8,
+      "młode listki": 4,
+      "mozzarella": 4,
+      "mozzarella tarta": 4,
+      "musztarda": 11,
+      "nabłyszczacz do zmywarki": 10,
+      "ogóreczki": 11,
+      "ogórki": 5,
+      "olej": 11,
+      "oliwa primadonna": null,
+      "oliwki": 11,
+      "owoce mrożone": 8,
+      "papier toaletowy": 10,
+      "papryczki": 11,
+      "papryka": 5,
+      "passata": 11,
+      "pasta do zębów": 10,
+      "pieczarki": 5,
+      "pinsa": 7,
+      "piratki": null,
+      "piwo": 3,
+      "piwo 0": 3,
+      "płyn do prania": 10,
+      "polędwiczki": 8,
+      "pomarańcze": 5,
+      "pomidory": 5,
+      "recznik papierowy": 10,
+      "rukola": 4,
+      "rum": 2,
+      "salami": 4,
+      "schab": 8,
+      "ser": 4,
+      "serek wiejski": 4,
+      "szpinak": 4,
+      "szynka": 4,
+      "śmietana": 4,
+      "tabletki do zmywarki": 10,
+      "tampony": 10,
+      "tofu": 4,
+      "tortellini": 8,
+      "tortille": 7,
+      "tuńczyk": 11,
+      "twaróg": 4,
+      "wątróbka": 8,
+      "whisky": 2,
+      "wino": 2,
+      "worki na śmieci": 10,
+      "ziemniaki": 5
+    }
+  },
   "lidl_hynka": {
     "sections": [
       {
@@ -130,6 +290,8 @@
       "marchewka": 2,
       "mięso mielone": 5,
       "mięso rosołowe": 5,
+      "mleko": 7,
+      "mleko owsiane": 7,
       "młode listki": 3,
       "mozzarella": 5,
       "mozzarella tarta": 5,
@@ -146,6 +308,7 @@
       "papryczki": 2,
       "papryka": 2,
       "passata": 2,
+      "pasta do zębów": 11,
       "pesto": 2,
       "pieczarki": 2,
       "pinsa": 1,
