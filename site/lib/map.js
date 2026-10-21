@@ -1,6 +1,7 @@
 // Store map as an SVG string. Shared by the site and the editor's browser pages.
 // Styling is left to CSS via the classes below:
-//   .store-map, .section, .decoration, .invisible (decoration with visible: false), .section-id
+//   .store-map, .section, .decoration, .invisible (decoration with visible: false), .section-id,
+//   .has-items / .no-items and .badge (only with the counts option)
 // Sections carry data-section="<id>".
 
 import { boundsOf, expandRect } from './geometry.js';
@@ -24,7 +25,9 @@ export function fitViewBox(layout) {
 // layout: { sections, decorations } as in stores.json.
 // showIds: write each section's id in its top-left corner. Editor only: the site must not
 // show ids, they mean nothing to a shopper.
-export function renderLayoutSvg(layout, { viewBox = fitViewBox(layout), showIds = false } = {}) {
+// counts: Map of section id → number of list items (site). Sections with items get the class
+// has-items and a count badge in the top-right corner; the others get no-items.
+export function renderLayoutSvg(layout, { viewBox = fitViewBox(layout), showIds = false, counts = null } = {}) {
   // Label size is relative to the store, not to the visible area, so labels scale with the
   // map when zooming instead of staying the same size on screen.
   const storeSize = fitViewBox(layout);
@@ -37,9 +40,12 @@ export function renderLayoutSvg(layout, { viewBox = fitViewBox(layout), showIds 
   }
   for (const section of layout.sections) {
     const id = showIds ? renderId(section.id, section.rect, baseFontSize) : '';
+    const count = counts?.get(section.id) ?? 0;
+    const classes = counts === null ? 'section' : count > 0 ? 'section has-items' : 'section no-items';
+    const badge = count > 0 ? renderBadge(count, section.rect, baseFontSize) : '';
     parts.push(
-      `<g class="section" data-section="${section.id}">` +
-        `${renderRect(section.rect)}${renderLabel(section.name, section.rect, baseFontSize)}${id}</g>`,
+      `<g class="${classes}" data-section="${section.id}">` +
+        `${renderRect(section.rect)}${renderLabel(section.name, section.rect, baseFontSize)}${id}${badge}</g>`,
     );
   }
   const vb = [viewBox.x, viewBox.y, viewBox.w, viewBox.h].map(formatNumber).join(' ');
@@ -82,6 +88,18 @@ function renderId(id, rect, baseFontSize) {
   return (
     `<text class="section-id" x="${formatNumber(rect.x + pad)}" y="${formatNumber(rect.y + pad)}" ` +
     `font-size="${formatNumber(fontSize)}" dominant-baseline="hanging">${id}</text>`
+  );
+}
+
+// Circle with the number of list items, in the top-right corner, scaled down for small rects.
+function renderBadge(count, rect, baseFontSize) {
+  const r = Math.min(baseFontSize * 0.9, rect.w * 0.25, rect.h * 0.25);
+  const cx = formatNumber(rect.x + rect.w - r * 1.2);
+  const cy = formatNumber(rect.y + r * 1.2);
+  return (
+    `<g class="badge"><circle cx="${cx}" cy="${cy}" r="${formatNumber(r)}"/>` +
+    `<text x="${cx}" y="${cy}" font-size="${formatNumber(r * 1.2)}" text-anchor="middle" ` +
+    `dominant-baseline="central">${count}</text></g>`
   );
 }
 

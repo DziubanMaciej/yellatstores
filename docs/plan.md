@@ -14,25 +14,26 @@ Editor UI: a terminal menu, plus a local browser page for drawing and viewing.
 yellatstores/
 ├── CLAUDE.md ✅
 ├── package.json ✅           {"type":"module", "scripts":{"test":…}}, no dependencies
-├── .github/workflows/pages.yml   test job → deploy job (site/ + data/)
+├── .github/workflows/pages.yml ✅  test job → deploy job (site/ + data/)
 ├── .claude/skills/fill-aliases/SKILL.md ✅
 ├── data/ ✅                  products.json, recipes.json, stores.json
 ├── docs/ ✅
-├── site/                     deployed as the site root
-│   ├── index.html, style.css
-│   ├── app.js                DOM wiring only, no logic
+├── site/ ✅                  deployed as the site root
+│   ├── index.html, style.css ✅
+│   ├── app.js ✅             DOM wiring only, no logic
 │   └── lib/                  pure ES modules, no DOM; shared with the editor
 │       ├── normalize.js ✅   normalize(), compareNames() (Polish alphabetical order)
 │       ├── geometry.js ✅    rect gap/overlap, drag → rect, bounding boxes
 │       ├── map.js ✅         store layout → SVG markup string
-│       ├── parse.js          split input, extract quantity + notes
-│       ├── expand.js         recipe expansion
-│       ├── resolve.js        name → product, product → section / unknown reason
-│       ├── group.js          group + order sections, Unknown last
-│       └── share.js          list/store ⇄ URL fragment
+│       ├── parse.js ✅       split input (newlines), extract quantity + notes
+│       ├── expand.js ✅      recipe expansion
+│       ├── resolve.js ✅     name → product, merge duplicates, product → section / unknown reason
+│       ├── group.js ✅       group + order sections, Unknown last
+│       ├── list.js ✅        the whole pipeline: text + store → groups
+│       └── share.js ✅       list/store ⇄ URL fragment
 ├── scripts/                  local only, never deployed
 │   ├── edit.js ✅            editor entry point: `node scripts/edit.js`
-│   ├── serve.js              local static server mirroring the deployed layout (site/ at /, data/ at /data)
+│   ├── serve.js ✅           local static server mirroring the deployed layout (site/ at /, data/ at /data)
 │   ├── lib/ ✅
 │   │   ├── data.js           load / save (validate → canonical formatting → write)
 │   │   ├── format.js         canonical JSON formatting
@@ -114,7 +115,7 @@ and the CLAUDE.md commands.
 1. Polish `.claude/skills/fill-aliases/SKILL.md` (draft exists, see [skills.md](skills.md)).
 2. You enter the real stores/products/recipes with the editor. The skill fills in aliases.
 
-## Phase 6: Site
+## Phase 6: Site ✅
 1. `scripts/serve.js` for local dev at `http://localhost:8000`.
 2. Pure modules + tests, following the pipeline in [requirements.md §2.2](requirements.md#22-processing-pipeline):
    - `parse.js`: split, the quantity table, Polish number words, notes
@@ -133,14 +134,15 @@ and the CLAUDE.md commands.
 *Done when:* a real list gives the right grouped list and map locally, on desktop and in
 Firefox's mobile view.
 
-## Phase 7: Share link
+## Phase 7: Share link ✅
 `share.js`: encode/decode `#sklep=…&lista=…` with `encodeURIComponent`. Tests: round-trip,
 Polish characters, newlines, `&`/`=`/`#` inside the list, a store missing from the data.
 (Phase 6 already uses it for Dalej. This phase is the hardening and edge cases.)
 
-## Phase 8: Deploy
-1. `.github/workflows/pages.yml` with two jobs. On push to `main`:
+## Phase 8: Deploy (workflow ✅, GitHub/DNS setup: follow hosting.md)
+1. `.github/workflows/pages.yml` with two jobs. On push to `master`:
    - **test**: `npm test`.
+   - Triggered by pushes to `master` (the repo's default branch), or by hand from the Actions tab.
    - **deploy** (`needs: test`): copy `site/*` and `data/` into `_site/`, run `upload-pages-artifact`, then `deploy-pages`.
    - If the tests fail, deploy never runs and the **previous version stays live**. The site is never taken down.
 2. Follow [hosting.md](hosting.md).

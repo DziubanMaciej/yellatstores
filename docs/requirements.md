@@ -49,7 +49,8 @@ on a PC too. No localStorage or any other stored state: the URL is the only stat
 
 ### 2.2 Processing pipeline
 
-1. **Split** the input on newlines, `,` and `;`. Trim and drop empty entries.
+1. **Split** the input on newlines only (one entry per line). Trim and drop empty entries.
+   Commas and semicolons are ordinary characters, so a note can hold them: `mleko (2l, bez laktozy)`.
 2. **Parse each entry** into `{ name, notes[] }`.
    - **Notes**: each `( … )` group in the entry is one note. `mleko (bez laktozy)` → note `bez laktozy`.
    - **Quantity**: becomes the note `Nx`, placed **first** among the entry's notes.
@@ -103,6 +104,8 @@ on a PC too. No localStorage or any other stored state: the URL is the only stat
   - Same on phone and PC.
   - On PC, hovering a clickable element shows a slight outline change, as a hint that it's clickable.
   - No scrolling on tap.
+- **Layout**: phones show the list on top and the map below. Screens 800px and wider show them
+  side by side (list left, map right), with the map staying in view while the list scrolls.
 
 ## 3. Editor
 

@@ -69,3 +69,12 @@ test('section ids are drawn in the top-left corner only when asked (editor only)
   assert.ok(Number(id[1]) > 0 && Number(id[1]) < 1);
   assert.ok(Number(id[2]) > 10 && Number(id[2]) < 11);
 });
+
+test('with counts, sections with items get a badge and the rest are dimmed; no ids on the site', () => {
+  const svg = renderLayoutSvg(store(), { counts: new Map([[1, 3], [3, 1]]) });
+  assert.match(svg, /<g class="section has-items" data-section="1">.*?<g class="badge"><circle [^>]*\/><text [^>]*>3<\/text><\/g><\/g>/);
+  assert.match(svg, /<g class="section no-items" data-section="2">(?:(?!badge).)*?<\/g>/);
+  assert.match(svg, /<g class="section has-items" data-section="3">.*?>1<\/text><\/g><\/g>/);
+  assert.equal(svg.match(/class="badge"/g).length, 2);
+  assert.doesNotMatch(svg, /section-id/);
+});

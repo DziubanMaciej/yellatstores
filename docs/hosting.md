@@ -64,8 +64,9 @@ other way round, there's a short window where someone else could claim `stores.`
 5. **Never delete this TXT record.** This also protects `stores.` and any other direct subdomain.
 
 ### 2. Push the repo with the deploy workflow
-1. Create the public repo `DziubanMaciej/yellatstores` on GitHub and push `main`. The repo must
-   already contain `.github/workflows/pages.yml` (added in the implementation, Phase 4).
+1. Create the public repo `DziubanMaciej/yellatstores` on GitHub and push `master`. The repo must
+   already contain `.github/workflows/pages.yml` (added in Phase 8). It runs on every push to
+   `master`, and can also be started by hand: Actions tab → *Deploy Pages* → **Run workflow**.
 2. Repo → **Settings** → **Pages** → **Build and deployment** → Source: **GitHub Actions**.
 3. Repo → **Actions** tab: the "Deploy Pages" run should go green. The site is now at
    `https://dziubanmaciej.github.io/yellatstores/`.
@@ -105,6 +106,11 @@ Repo → Settings → Pages → tick **Enforce HTTPS**. If it's greyed out, GitH
 the certificate. Wait (usually under an hour, at most 24h) and retry.
 
 Done: https://stores.yellatcomputers.com
+
+## Running the site locally
+`node scripts/serve.js` serves it at http://localhost:8000/ with the same layout as deployed
+(`site/` at the root, `data/` at `/data/`). Pass another port as an argument if 8000 is taken:
+`node scripts/serve.js 8080`. Data and code changes show up on a plain reload.
 
 ## Day-to-day
 - Change data/code locally → `npm test` → commit → `git push`. Actions redeploys in about 1 minute.

@@ -120,3 +120,11 @@ Small choices made while building the editor. Each is easy to change.
 |-------|----------|
 | Assigning products | "Assign products to store" opens a browser page instead of the terminal flow (which was removed): the current product is shown above the map, and clicking a section assigns it. Buttons: Not in this store, Skip, Back (clears the previous answer), Done. Replaces the "Assign flow" implementation choice above. |
 | Saving | Every click is saved immediately, as before. Pages can now send messages to the terminal while open (`POST /api/message`). |
+
+## Round 8 (2026-10-21)
+
+| Topic | Decision |
+|-------|----------|
+| List splitting | The list is split on **newlines only**. Commas and semicolons are ordinary characters (so `mleko (2l, bez laktozy)` is one entry with one note). Supersedes the Round 1 rule. |
+| PC layout | Screens 800px and wider: list on the left, map on the right, the map staying in view while the list scrolls. Phones: list on top, map below. |
+| Deploy branch | The workflow deploys on pushes to `master`, the repo's actual default branch (the docs used to say `main`). |

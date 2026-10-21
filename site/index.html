@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>YellAtStores</title>
+    <link rel="stylesheet" href="style.css" />
+    <script type="module" src="app.js"></script>
+  </head>
+  <body>
+    <main>
+      <p id="loading" class="status">Wczytywanie…</p>
+      <p id="error" class="message error" hidden></p>
+
+      <form id="input-view" class="input-view" hidden>
+        <p id="message" class="message error" hidden></p>
+        <label for="store">Sklep</label>
+        <select id="store">
+          <option value="" disabled selected>Wybierz sklep</option>
+        </select>
+        <label for="list">Lista zakupów</label>
+        <textarea id="list" rows="12" placeholder="Jedna pozycja w linii, np.&#10;2 mleko (bez laktozy)&#10;chleb"></textarea>
+        <button id="next" class="primary" type="submit" disabled>Dalej</button>
+      </form>
+
+      <section id="result-view" hidden>
+        <div class="result-bar">
+          <h1 id="store-name"></h1>
+          <button id="copy" type="button">Kopiuj link</button>
+          <button id="edit" type="button">Edytuj</button>
+          <span id="copy-status" class="status"></span>
+        </div>
+        <div class="result">
+          <div id="groups" class="groups"></div>
+          <div id="map" class="map"></div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

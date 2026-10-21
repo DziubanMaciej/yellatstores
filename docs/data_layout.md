@@ -128,4 +128,5 @@ editor, and on the output of the editor tests.
 
    A hand-edited file that breaks only this rule can be fixed with the editor's "Validate data".
 9. Product names, recipe names and their aliases can't contain `,` `;` `(` `)`. The site's
-   list parser treats those as separators or notes, so such a name could never be matched.
+   list parser reads `( … )` as a note, so such a name could never be matched. (`,` and `;`
+   were list separators until Round 8; the rule still rejects them.)
