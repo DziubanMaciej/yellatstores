@@ -165,7 +165,7 @@
     "aliases": ["świderki"]
   },
   "marchewka": {
-    "aliases": ["marchew"]
+    "aliases": ["marchew", "marchewki"]
   },
   "mięso mielone": {
     "aliases": []
@@ -177,10 +177,10 @@
     "aliases": ["sałata", "listki"]
   },
   "mozzarella": {
-    "aliases": []
+    "aliases": [ "mozarella", "mozzarela", "mozarela"]
   },
   "mozzarella tarta": {
-    "aliases": []
+    "aliases": [ "mozarella tarta", "mozzarela tarta", "mozarela tarta"]
   },
   "musztarda": {
     "aliases": []
