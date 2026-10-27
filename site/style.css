@@ -162,6 +162,11 @@ button:disabled {
   color: var(--muted);
 }
 
+.groups .suggestion {
+  color: var(--accent);
+  font-weight: 600;
+}
+
 .groups .group.selected {
   background: var(--section-fill);
   border-color: var(--section-stroke);

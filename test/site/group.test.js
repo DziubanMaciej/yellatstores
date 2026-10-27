@@ -16,7 +16,7 @@ test('groups follow the store section order, keep typed order inside, and Niezna
       section: null,
       title: 'Nieznane',
       items: [
-        { name: 'xyz', notes: ['nieznany produkt'] },
+        { name: 'xyz', notes: ['nieznany produkt'], suggestions: [] },
         { name: 'passata', notes: ['nie ma w tym sklepie'] },
         { name: 'mleko', notes: ['nieprzypisany w tym sklepie'] },
       ],
@@ -43,4 +43,14 @@ test('sections without items and an empty Nieznane group are left out', () => {
 test('items are shown as name (note, note, …)', () => {
   assert.equal(formatItem({ name: 'mleko', notes: [] }), 'mleko');
   assert.equal(formatItem({ name: 'mleko', notes: ['2x', 'bez laktozy'] }), 'mleko (2x, bez laktozy)');
+});
+
+test('unknown products carry suggestions; recipes only for entries without quantity or notes', () => {
+  const unknown = (text) => processList(text, sampleData(), 'Lidl Główna').at(-1).items;
+  assert.deepEqual(unknown('pomidorki\nspagetti\n2 spagetti\npassata'), [
+    { name: 'pomidorki', notes: ['nieznany produkt'], suggestions: ['pomidory'] },
+    { name: 'spagetti', notes: ['nieznany produkt'], suggestions: ['spaghetti'] },
+    { name: 'spagetti', notes: ['2x', 'nieznany produkt'], suggestions: [] },
+    { name: 'passata', notes: ['nie ma w tym sklepie'] },
+  ]);
 });

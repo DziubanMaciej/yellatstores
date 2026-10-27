@@ -134,3 +134,12 @@ Small choices made while building the editor. Each is easy to change.
 | Topic | Decision |
 |-------|----------|
 | Site server on the LAN | `node scripts/serve.js --lan` listens on all interfaces (and prints the LAN URLs) so the site can be tried from a phone. Without the flag it stays on `127.0.0.1`. |
+
+## Round 9 (2026-10-27)
+
+| Topic | Decision |
+|-------|----------|
+| Suggestions | Unknown products (*nieznany produkt*) get up to 3 close names as links after the item, e.g. `ogrórki (nieznany produkt) ogórki?`. Supersedes "no suggestions" in the non-goals; there is still no automatic fuzzy matching. |
+| Closeness | Edit distance (insert, delete, change, swap neighbours) on normalised names and aliases, at most about one edit per three letters (at least 1). Closest first. |
+| Recipes | Suggested too, but only for entries without a quantity or notes (otherwise the fixed entry wouldn't expand). |
+| Applying | The link is the same share link with the name replaced on every line naming it; quantities and notes stay. |

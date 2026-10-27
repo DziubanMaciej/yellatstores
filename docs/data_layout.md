@@ -18,7 +18,9 @@ one `normalize()` function:
    by Unicode NFD, so it needs an explicit mapping.
 
 No plurals, no inflection, no fuzzy matching. Every form you type must exist as a name or
-alias. The `fill-aliases` Claude skill helps with that (see [skills.md](skills.md)).
+alias. The `fill-aliases` Claude skill helps with that (see [skills.md](skills.md)). The site
+only *suggests* close names for unknown products (requirements §2.3); it never matches them
+on its own.
 
 ## `data/products.json`
 

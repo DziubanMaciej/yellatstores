@@ -7,14 +7,16 @@ export const UNKNOWN_TITLE = 'Nieznane';
 // items: resolveEntries() results. Returns groups:
 //   { section: id | null, title, items: [{ name, notes }] }
 // Sections come in stores.json order and only when they have items. Unknown items come last,
-// in one group (section: null), with the reason as their last note.
+// in one group (section: null), with the reason as their last note; their suggestions (see
+// processList), if any, are passed along.
 export function groupItems(items, store) {
   const bySection = new Map(store.sections.map((section) => [section.id, []]));
   const unknown = [];
   for (const item of items) {
     const place = locate(item, store);
     if (place.unknown) {
-      unknown.push({ name: item.name, notes: [...item.notes, place.unknown] });
+      const shown = { name: item.name, notes: [...item.notes, place.unknown] };
+      unknown.push(item.suggestions ? { ...shown, suggestions: item.suggestions } : shown);
     } else {
       bySection.get(place.section).push({ name: item.name, notes: item.notes });
     }

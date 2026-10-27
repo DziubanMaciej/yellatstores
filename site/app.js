@@ -5,6 +5,7 @@ import { formatItem } from './lib/group.js';
 import { processList } from './lib/list.js';
 import { renderLayoutSvg } from './lib/map.js';
 import { decodeShare, encodeShare } from './lib/share.js';
+import { fixList } from './lib/suggest.js';
 
 const $ = (id) => document.getElementById(id);
 let data = null;
@@ -81,6 +82,14 @@ function renderGroup(group) {
   for (const item of group.items) {
     const li = document.createElement('li');
     li.textContent = formatItem(item);
+    // Each suggestion links to the same list with this name replaced.
+    for (const suggestion of item.suggestions ?? []) {
+      const link = document.createElement('a');
+      link.className = 'suggestion';
+      link.href = encodeShare({ store: shown.store, list: fixList(shown.list, item.name, suggestion) });
+      link.textContent = `${suggestion}?`;
+      li.append(' ', link);
+    }
     list.append(li);
   }
   box.append(heading, list);

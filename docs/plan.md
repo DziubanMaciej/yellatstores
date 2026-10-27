@@ -30,7 +30,8 @@ yellatstores/
 │       ├── resolve.js ✅     name → product, merge duplicates, product → section / unknown reason
 │       ├── group.js ✅       group + order sections, Unknown last
 │       ├── list.js ✅        the whole pipeline: text + store → groups
-│       └── share.js ✅       list/store ⇄ URL fragment
+│       ├── share.js ✅       list/store ⇄ URL fragment
+│       └── suggest.js ✅     suggestions for unknown products, list with a suggestion applied
 ├── scripts/                  local only, never deployed
 │   ├── edit.js ✅            editor entry point: `node scripts/edit.js`
 │   ├── serve.js ✅           local static server mirroring the deployed layout (site/ at /, data/ at /data)

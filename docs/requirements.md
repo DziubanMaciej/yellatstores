@@ -106,6 +106,15 @@ on a PC too. No localStorage or any other stored state: the URL is the only stat
   - No scrolling on tap.
 - **Layout**: phones show the list on top and the map below. Screens 800px and wider show them
   side by side (list left, map right), with the map staying in view while the list scrolls.
+- **Suggestions for unknown products** (*nieznany produkt* only): up to 3 product or recipe
+  names close to what was typed, shown after the item as links: `ogrórki (nieznany produkt) ogórki?`
+  - Close = within about one edit per three letters of the typed name (an edit: insert, delete or
+    change a letter, or swap two neighbours), compared normalised, against names and aliases.
+    Closest first. Always at least 1 edit allowed.
+  - Recipes are suggested only for entries without a quantity or notes, since a recipe with
+    them wouldn't expand.
+  - A link opens the same list with that name replaced on every line naming it; quantities and
+    notes stay (`2 ogrórki (małe)` → `2 ogórki (małe)`). It's a normal link: Back undoes it.
 
 ## 3. Editor
 
@@ -164,8 +173,9 @@ Hostinger. Tutorial: [hosting.md](hosting.md).
 
 ## 7. Non-goals (for now)
 - Walking path or route suggestions.
-- Plurals, inflection, fuzzy matching, units, summing quantities.
-- Quantities or notes on recipe entries, nested recipes. Suggestions for unmatched items.
+- Plurals, inflection, fuzzy matching (beyond the suggestions in §2.3), units, summing quantities.
+- Quantities or notes on recipe entries, nested recipes. Matching unknown items automatically
+  (the site only suggests, see §2.3).
 - Deleting anything from the editor. Bulk import. Product categories.
 - Fixing Unknown items from the site.
 - Any stored state on the site (localStorage, cookies). Offline mode, accounts, backend, git hooks.
