@@ -2,6 +2,9 @@
   "awokado": {
     "aliases": ["avoda"]
   },
+  "bagietki": {
+    "aliases": ["bagietka"]
+  },
   "banan": {
     "aliases": ["banany"]
   },
@@ -22,6 +25,9 @@
   },
   "bób": {
     "aliases": []
+  },
+  "brokuł": {
+    "aliases": ["brokuły"]
   },
   "bułki": {
     "aliases": []
@@ -45,6 +51,9 @@
     "aliases": []
   },
   "cukier wanilinowy": {
+    "aliases": []
+  },
+  "cynamon": {
     "aliases": []
   },
   "cytryny": {
@@ -79,6 +88,9 @@
   },
   "frankfurterki": {
     "aliases": ["kiełbaski"]
+  },
+  "grani": {
+    "aliases": ["serek grani", "twarożek", "twarożek grani"]
   },
   "groszek": {
     "aliases": []
@@ -209,6 +221,9 @@
   "oliwki": {
     "aliases": []
   },
+  "oregano": {
+    "aliases": []
+  },
   "orzechy włoskie": {
     "aliases": []
   },
@@ -222,6 +237,12 @@
     "aliases": ["jalapeno", "papryczki jalapeno"]
   },
   "papryka": {
+    "aliases": []
+  },
+  "papryka ostra": {
+    "aliases": []
+  },
+  "papryka słodka": {
     "aliases": []
   },
   "passata": {
@@ -269,6 +290,9 @@
   "pomidory suszone": {
     "aliases": []
   },
+  "pomidory w puszce": {
+    "aliases": []
+  },
   "recznik papierowy": {
     "aliases": ["reczniki papierowe", "reczniki"]
   },
@@ -289,6 +313,9 @@
   },
   "serek wiejski": {
     "aliases": ["serki wiejskie"]
+  },
+  "sos pomidorowy": {
+    "aliases": ["sos maklowicz", "maklowicz"]
   },
   "sól": {
     "aliases": []
@@ -345,6 +372,9 @@
     "aliases": ["worki"]
   },
   "ziemniaki": {
+    "aliases": []
+  },
+  "ziola prowansalskie": {
     "aliases": []
   }
 }
