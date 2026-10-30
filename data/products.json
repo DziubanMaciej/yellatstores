@@ -21,6 +21,9 @@
     "aliases": []
   },
   "biała fasola": {
+    "aliases": ["fasola biala"]
+  },
+  "biszkopty": {
     "aliases": []
   },
   "borówki": {
@@ -53,6 +56,9 @@
   "cukier": {
     "aliases": []
   },
+  "cukier puder": {
+    "aliases": []
+  },
   "cukier wanilinowy": {
     "aliases": []
   },
@@ -66,7 +72,7 @@
     "aliases": []
   },
   "czerwona fasola": {
-    "aliases": ["fasola"]
+    "aliases": ["fasola", "fasola czerwona"]
   },
   "czerwona kapusta": {
     "aliases": ["kapusta czerwona"]
@@ -182,6 +188,12 @@
   "marchewka": {
     "aliases": ["marchew", "marchewki"]
   },
+  "mascarpone": {
+    "aliases": []
+  },
+  "mąka": {
+    "aliases": []
+  },
   "mięso mielone": {
     "aliases": []
   },
@@ -290,6 +302,9 @@
   "pomarańcze": {
     "aliases": []
   },
+  "pomidorki koktajlowe": {
+    "aliases": ["pomidorki"]
+  },
   "pomidory": {
     "aliases": ["pomidor"]
   },
@@ -298,6 +313,9 @@
   },
   "pomidory w puszce": {
     "aliases": []
+  },
+  "psikacz do kuchni": {
+    "aliases": ["psikacz"]
   },
   "recznik papierowy": {
     "aliases": ["reczniki papierowe", "reczniki"]
@@ -381,6 +399,9 @@
     "aliases": []
   },
   "ziola prowansalskie": {
+    "aliases": []
+  },
+  "żurawina": {
     "aliases": []
   }
 }

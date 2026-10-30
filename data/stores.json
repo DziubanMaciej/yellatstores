@@ -344,6 +344,8 @@
       "makaron spaghetti": 8,
       "makaron świderki": 8,
       "marchewka": 2,
+      "mascarpone": 6,
+      "mąka": 7,
       "mięso mielone": 5,
       "mięso rosołowe": 5,
       "mleko": 7,
@@ -380,9 +382,11 @@
       "płyn do prania": 11,
       "polędwiczki": 5,
       "pomarańcze": 2,
+      "pomidorki koktajlowe": 2,
       "pomidory": 2,
       "pomidory suszone": 2,
       "pomidory w puszce": 2,
+      "psikacz do kuchni": 11,
       "recznik papierowy": 11,
       "rukola": 3,
       "rum": 9,
@@ -410,7 +414,8 @@
       "wino bezalkoholowe": 9,
       "worki na śmieci": 11,
       "ziemniaki": 2,
-      "ziola prowansalskie": 2
+      "ziola prowansalskie": 2,
+      "żurawina": 7
     }
   }
 }
