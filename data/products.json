@@ -26,6 +26,9 @@
   "biszkopty": {
     "aliases": []
   },
+  "boczek w plastrach": {
+    "aliases": ["boczek"]
+  },
   "borówki": {
     "aliases": []
   },
@@ -60,6 +63,9 @@
     "aliases": []
   },
   "cukier wanilinowy": {
+    "aliases": []
+  },
+  "cukinia": {
     "aliases": []
   },
   "cynamon": {
@@ -297,7 +303,7 @@
     "aliases": []
   },
   "polędwiczki": {
-    "aliases": []
+    "aliases": ["polędwiczki z kurczaka"]
   },
   "pomarańcze": {
     "aliases": []
@@ -357,6 +363,9 @@
     "aliases": ["wędlina"]
   },
   "śmietana": {
+    "aliases": []
+  },
+  "śmietanka": {
     "aliases": []
   },
   "tabletki do zmywarki": {
